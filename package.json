@@ -1,0 +1,54 @@
+{
+  "name": "create-slots",
+  "version": "0.0.0",
+  "description": "Bring slots to React component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nihgwu/create-slots.git"
+  },
+  "author": "Neo Nie <nihgwu@live.com>",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "component",
+    "slots",
+    "composition"
+  ],
+  "source": "./src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.umd.js",
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./dist/index.modern.mjs"
+  },
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest",
+    "test:ci": "jest --coverage",
+    "typecheck": "tsc --noEmit",
+    "build": "microbundle build --jsx React.createElement  --jsxFragment React.Fragment",
+    "watch": "microbundle watch --jsx React.createElement  --jsxFragment React.Fragment",
+    "clean": "rimraf dist",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.10",
+    "microbundle": "^0.15.0",
+    "react": "^18.1.0"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0 || ^17 || ^18"
+  },
+  "browserslist": [
+    "Chrome > 61",
+    "Edge > 16",
+    "Firefox > 60",
+    "Safari > 10.1"
+  ]
+}
