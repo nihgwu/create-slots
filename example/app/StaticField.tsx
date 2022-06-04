@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createSlots from 'create-slots'
+import createSlots from 'create-slots/static'
 
 const { createHostComponnet, SlotComponents, useSlots } = createSlots({
   Label: 'label',
@@ -28,8 +28,8 @@ const FieldBase: React.FC<FieldProps> = (props) => {
   )
 }
 
-export const Field = Object.assign(
+export const StaticField = Object.assign(
   createHostComponnet(FieldBase),
   SlotComponents
 )
-Field.displayName = 'Field'
+StaticField.displayName = 'StaticField'

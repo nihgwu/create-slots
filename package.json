@@ -14,15 +14,22 @@
     "slots",
     "composition"
   ],
-  "source": "./src/index.tsx",
+  "source": "./src/*.tsx",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.umd.js",
   "exports": {
-    "require": "./dist/index.js",
-    "default": "./dist/index.modern.mjs"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.modern.js"
+    },
+    "./static": {
+      "types": "./dist/static.d.ts",
+      "require": "./dist/static.js",
+      "default": "./dist/static.modern.js"
+    }
   },
-  "types": "dist/index.d.ts",
   "sideEffects": false,
   "files": [
     "dist"

@@ -12,10 +12,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     const SlotComponent = ((props) => {
       const Slots = React.useContext(SlotsContext)
 
-      React.useState(() => Slots.register(name, props))
-      useIsomorphicEffect(() => Slots.update(name, props))
       useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
 
+      Slots.update(name, props)
       return null
     }) as T[K]
 
@@ -25,11 +24,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const createHostComponnet = <P extends React.ComponentType>(Component: P) => {
     const HostComponent = (({ children, ...props }: any) => {
-      const forceUpdate = React.useReducer(() => [], [])[1]
-      const Slots = React.useMemo(
-        () => createSlotsManager(components, forceUpdate),
-        [forceUpdate]
-      )
+      const Slots = React.useMemo(() => createSlotsManager(components), [])
       return (
         <SlotsContext.Provider value={Slots}>
           {children}
