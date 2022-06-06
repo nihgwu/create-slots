@@ -1,7 +1,12 @@
 import * as React from 'react'
 
 export const useIsomorphicEffect =
+  // istanbul ignore next
   typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect
+
+export const getComponentName = (Component: React.ComponentType) =>
+  // istanbul ignore next
+  Component.displayName || Component.name || 'Component'
 
 export const createSlotsManager = <T extends Record<string, React.ElementType>>(
   components: T,
@@ -21,7 +26,9 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
       propsMap.delete(name)
       onChange?.(name, null)
     },
-    getProps(name: K) {
+    getProps<P extends K>(
+      name: P
+    ): Partial<React.ComponentProps<T[P]>> | undefined {
       return propsMap.get(name)
     },
     render<P extends K>(

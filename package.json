@@ -45,9 +45,16 @@
     "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
+    "@types/jest": "^28.1.1",
     "@types/react": "^18.0.10",
+    "@types/react-test-renderer": "^18.0.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "microbundle": "^0.15.0",
-    "react": "^18.1.0"
+    "react": "^18.1.0",
+    "react-test-renderer": "^18.1.0",
+    "ts-jest": "^28.0.4",
+    "typescript": "^4.7.3"
   },
   "peerDependencies": {
     "react": "^16.0.0 || ^17 || ^18"
@@ -57,5 +64,20 @@
     "Edge > 16",
     "Firefox > 60",
     "Safari > 10.1"
-  ]
+  ],
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  }
 }

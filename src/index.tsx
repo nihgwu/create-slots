@@ -1,5 +1,9 @@
 import * as React from 'react'
-import { createSlotsManager, useIsomorphicEffect } from './shared'
+import {
+  createSlotsManager,
+  getComponentName,
+  useIsomorphicEffect,
+} from './shared'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
@@ -39,9 +43,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
         )
       }
     ) as unknown as P
-    HostComponent.displayName = `Host(${
-      Component.displayName || Component.name || 'Component'
-    })`
+    HostComponent.displayName = `Host(${getComponentName(Component)})`
 
     return HostComponent
   }
