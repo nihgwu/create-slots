@@ -1,6 +1,6 @@
 {
   "name": "create-slots",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Bring slots to React component",
   "repository": {
     "type": "git",
