@@ -9,34 +9,36 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const SlotComponents = Object.keys(components).reduce((acc, slotName) => {
     const name = slotName as K
-    const SlotComponent = ((props) => {
+    const SlotComponent = React.forwardRef((props, ref) => {
       const Slots = React.useContext(SlotsContext)
 
-      React.useState(() => Slots.register(name, props))
-      useIsomorphicEffect(() => Slots.update(name, props))
+      React.useState(() => Slots.register(name, { ...props, ref }))
+      useIsomorphicEffect(() => Slots.update(name, { ...props, ref }))
       useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
 
       return null
-    }) as T[K]
+    }) as unknown as T[K]
 
     acc[name] = SlotComponent
     return acc
   }, {} as T)
 
   const createHostComponent = <P extends React.ComponentType>(Component: P) => {
-    const HostComponent = (({ children, ...props }: any) => {
-      const forceUpdate = React.useReducer(() => [], [])[1]
-      const Slots = React.useMemo(
-        () => createSlotsManager(components, forceUpdate),
-        [forceUpdate]
-      )
-      return (
-        <SlotsContext.Provider value={Slots}>
-          {children}
-          <Component {...props} />
-        </SlotsContext.Provider>
-      )
-    }) as P
+    const HostComponent = React.forwardRef(
+      ({ children, ...props }: any, ref) => {
+        const forceUpdate = React.useReducer(() => [], [])[1]
+        const Slots = React.useMemo(
+          () => createSlotsManager(components, forceUpdate),
+          [forceUpdate]
+        )
+        return (
+          <SlotsContext.Provider value={Slots}>
+            {children}
+            <Component ref={ref} {...props} />
+          </SlotsContext.Provider>
+        )
+      }
+    ) as unknown as P
     HostComponent.displayName = `Host(${
       Component.displayName || Component.name || 'Component'
     })`

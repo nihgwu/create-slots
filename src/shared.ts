@@ -8,27 +8,27 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
   onChange?: (name: keyof T, props: unknown) => void
 ) => {
   type K = keyof T
-  const propsMap = {} as Record<K, object | null>
+  const propsMap = new Map<K, object>()
   return {
     register(name: K, props: object) {
-      propsMap[name] = props
+      propsMap.set(name, props)
     },
     update(name: K, props: object) {
-      propsMap[name] = props
+      propsMap.set(name, props)
       onChange?.(name, props)
     },
     unmount(name: K) {
-      propsMap[name] = null
+      propsMap.delete(name)
       onChange?.(name, null)
     },
     getProps(name: K) {
-      return propsMap[name]
+      return propsMap.get(name)
     },
     render<P extends K>(
       name: P,
       defaultProps?: Partial<React.ComponentProps<T[P]>>
     ) {
-      const props = propsMap[name]
+      const props = propsMap.get(name)
       if (!props) return null
 
       return React.createElement(
@@ -37,7 +37,7 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
       )
     },
     has(name: K) {
-      return !!propsMap[name]
+      return propsMap.has(name)
     },
   }
 }
