@@ -20,14 +20,14 @@
   "unpkg": "dist/index.umd.js",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "import": "./dist/index.modern.js",
       "require": "./dist/index.js",
-      "default": "./dist/index.modern.js"
+      "types": "./dist/index.d.ts"
     },
     "./static": {
-      "types": "./dist/static.d.ts",
+      "import": "./dist/static.modern.js",
       "require": "./dist/static.js",
-      "default": "./dist/static.modern.js"
+      "types": "./dist/static.d.ts"
     }
   },
   "sideEffects": false,

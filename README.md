@@ -10,7 +10,7 @@ Bring slots to React component, with SSR support
 import * as React from 'react'
 import createSlots from 'create-slots'
 
-const { createHostComponnet, SlotComponents, useSlots } = createSlots({
+const { createHostComponent, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: 'p',
@@ -38,7 +38,7 @@ const FieldBase: React.FC<FieldProps> = (props) => {
 }
 
 export const Field = Object.assign(
-  createHostComponnet(FieldBase),
+  createHostComponent(FieldBase),
   SlotComponents
 )
 Field.displayName = 'Field'

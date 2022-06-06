@@ -1,7 +1,7 @@
 import * as React from 'react'
 import createSlots from 'create-slots/static'
 
-const { createHostComponnet, SlotComponents, useSlots } = createSlots({
+const { createHostComponent, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: 'p',
@@ -29,7 +29,7 @@ const FieldBase: React.FC<FieldProps> = (props) => {
 }
 
 export const StaticField = Object.assign(
-  createHostComponnet(FieldBase),
+  createHostComponent(FieldBase),
   SlotComponents
 )
 StaticField.displayName = 'StaticField'

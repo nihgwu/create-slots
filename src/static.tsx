@@ -22,7 +22,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     return acc
   }, {} as T)
 
-  const createHostComponnet = <P extends React.ComponentType>(Component: P) => {
+  const createHostComponent = <P extends React.ComponentType>(Component: P) => {
     const HostComponent = (({ children, ...props }: any) => {
       const Slots = React.useMemo(() => createSlotsManager(components), [])
       return (
@@ -55,7 +55,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   return {
     SlotsContext,
     SlotComponents,
-    createHostComponnet,
+    createHostComponent,
     useSlots,
   }
 }
