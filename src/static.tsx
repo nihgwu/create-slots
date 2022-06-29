@@ -1,9 +1,7 @@
 import * as React from 'react'
-import {
-  createSlotsManager,
-  getComponentName,
-  useIsomorphicEffect,
-} from './shared'
+
+import { createSlotsManager } from './SlotsManager'
+import { getComponentName, useIsomorphicEffect } from './utils'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
@@ -43,18 +41,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     return HostComponent
   }
 
-  const useSlots = () => {
-    const Slots = React.useContext(SlotsContext)
-
-    return React.useMemo(
-      () => ({
-        getProps: Slots.getProps,
-        render: Slots.render,
-        has: Slots.has,
-      }),
-      [Slots]
-    )
-  }
+  const useSlots = () => React.useContext(SlotsContext)
 
   return {
     SlotsContext,
