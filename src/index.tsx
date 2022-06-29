@@ -13,15 +13,17 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const SlotComponents = Object.keys(components).reduce((acc, slotName) => {
     const name = slotName as K
-    const SlotComponent = React.forwardRef((props, ref) => {
-      const Slots = React.useContext(SlotsContext)
+    const SlotComponent = React.memo(
+      React.forwardRef((props, ref) => {
+        const Slots = React.useContext(SlotsContext)
 
-      React.useState(() => Slots.register(name, { ...props, ref }))
-      useIsomorphicEffect(() => Slots.update(name, { ...props, ref }))
-      useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
+        React.useState(() => Slots.register(name, { ...props, ref }))
+        useIsomorphicEffect(() => Slots.update(name, { ...props, ref }))
+        useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
 
-      return null
-    }) as unknown as T[K]
+        return null
+      })
+    ) as unknown as T[K]
 
     acc[name] = SlotComponent
     return acc
@@ -48,18 +50,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     return HostComponent
   }
 
-  const useSlots = () => {
-    const Slots = React.useContext(SlotsContext)
-
-    return React.useMemo(
-      () => ({
-        getProps: Slots.getProps,
-        render: Slots.render,
-        has: Slots.has,
-      }),
-      [Slots]
-    )
-  }
+  const useSlots = () => React.useContext(SlotsContext)
 
   return {
     SlotsContext,
