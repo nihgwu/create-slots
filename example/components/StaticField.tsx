@@ -1,5 +1,5 @@
 import * as React from 'react'
-import createSlots from 'create-slots/static'
+import createSlots from 'create-slots'
 
 const { createHostComponent, SlotComponents, useSlots } = createSlots({
   Label: 'label',
