@@ -1,0 +1,10 @@
+{
+  "main": "../dist/list.js",
+  "module": "../dist/list.esm.js",
+  "unpkg": "../dist/list.umd.js",
+  "types": "../dist/list.d.ts",
+  "exports": {
+    "import": "./../dist/list.modern.js",
+    "require": "./../dist/list.js"
+  }
+}

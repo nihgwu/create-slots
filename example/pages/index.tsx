@@ -1,3 +1,4 @@
+import React from 'react'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -5,8 +6,10 @@ import styles from '../styles/Home.module.css'
 
 import { Field } from '../components/Field'
 import { StaticField } from '../components/StaticField'
+import { Select } from '../components/Select'
 
 const Home: NextPage = () => {
+  const [count, setCount] = React.useState(0)
   return (
     <div className={styles.container}>
       <Head>
@@ -19,22 +22,50 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
+        <button onClick={() => setCount(count + 1)}>Count {count}</button>
+
         <Field>
           <Field.Input />
           <Field.Label>Field Label</Field.Label>
-          <Field.Description>Field Description</Field.Description>
+          <Field.Description>
+            Field Description
+            <Field>
+              <Field.Input />
+              <Field.Label>Field Label</Field.Label>
+              <Field.Description>Field Description</Field.Description>
+            </Field>
+          </Field.Description>
         </Field>
+
         <StaticField>
           <StaticField.Input />
           <StaticField.Label>Field Label</StaticField.Label>
           <StaticField.Description>Field Description</StaticField.Description>
         </StaticField>
+
+        <Select>
+          <Select.Item value="foo">
+            <Select.Item.Title>Foo</Select.Item.Title>
+          </Select.Item>
+          <Select.Divider />
+          {count % 3 === 2 && (
+            <>
+              <Select.Item value="bar">
+                <Select.Item.Title>Bar</Select.Item.Title>
+              </Select.Item>
+              <Select.Divider />
+            </>
+          )}
+          <Select.Item value="baz">
+            <Select.Item.Title>Baz</Select.Item.Title>
+            <Select.Item.Description>count {count}</Select.Item.Description>
+          </Select.Item>
+        </Select>
       </main>
 
       <footer className={styles.footer}>

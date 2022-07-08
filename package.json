@@ -18,6 +18,7 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.modern.js",
@@ -28,6 +29,11 @@
       "import": "./dist/static.modern.js",
       "require": "./dist/static.js",
       "types": "./dist/static.d.ts"
+    },
+    "./list": {
+      "import": "./dist/list.modern.js",
+      "require": "./dist/list.js",
+      "types": "./dist/list.d.ts"
     }
   },
   "sideEffects": false,
