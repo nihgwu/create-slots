@@ -1,100 +1,140 @@
 import * as React from 'react'
 import { create } from 'react-test-renderer'
-import createSlots from '../static'
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
-  Label: 'label',
-  Input: 'input',
-  Description: 'p',
-  Icon: 'span',
-})
-
-type FieldProps = React.ComponentPropsWithoutRef<'div'>
-
-const FieldBase: React.FC<FieldProps> = (props) => {
-  const Slots = useSlots()
-  const id = React.useId()
-  const descriptionId = React.useId()
-  const inputId = Slots.getProps('Input')?.['id'] || id
-
-  return (
-    <div {...props}>
-      {Slots.render('Label', { htmlFor: inputId })}
-      {Slots.render('Input', {
-        id: inputId,
-        'aria-describedby': Slots.has('Description')
-          ? descriptionId
-          : undefined,
-      })}
-      {(Slots.has('Icon') || Slots.has('Description')) && (
-        <div>
-          {Slots.render('Icon')}
-          {Slots.render('Description', { id: descriptionId })}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export const Field = Object.assign(
-  createHostComponent(FieldBase),
-  SlotComponents
-)
+import { StaticField } from '../__fixtures__/StaticField'
 
 test('render slots', () => {
   const instance = create(
-    <Field>
-      <Field.Label>Label</Field.Label>
-      <Field.Input />
-      <Field.Description>Description</Field.Description>
-    </Field>
+    <StaticField>
+      <StaticField.Label>Label</StaticField.Label>
+      <StaticField.Input />
+      <StaticField.Icon>-</StaticField.Icon>
+      <StaticField.Description>Description</StaticField.Description>
+    </StaticField>
   )
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <label
-    htmlFor=":r0:"
-  >
-    Label
-  </label>
-  <input
-    aria-describedby=":r1:"
-    id=":r0:"
-  />
-  <div>
-    <p
-      id=":r1:"
-    >
-      Description
-    </p>
-  </div>
-</div>
-`)
+    <div>
+      <label
+        htmlFor=":r0:"
+      >
+        Label
+      </label>
+      <input
+        aria-describedby=":r1:"
+        id=":r0:"
+      />
+      <div>
+        <span>
+          -
+        </span>
+        <span
+          id=":r1:"
+        >
+          Description
+        </span>
+      </div>
+    </div>
+  `)
 
+  // arbitrary order
   instance.update(
-    <Field>
-      <Field.Label>Label</Field.Label>
-      <Field.Input />
-    </Field>
+    <StaticField>
+      <StaticField.Icon>-</StaticField.Icon>
+      <StaticField.Input />
+      <StaticField.Description>Description</StaticField.Description>
+      <StaticField.Label>Label</StaticField.Label>
+    </StaticField>
+  )
+  expect(instance).toMatchInlineSnapshot(`
+    <div>
+      <label
+        htmlFor=":r0:"
+      >
+        Label
+      </label>
+      <input
+        aria-describedby=":r1:"
+        id=":r0:"
+      />
+      <div>
+        <span>
+          -
+        </span>
+        <span
+          id=":r1:"
+        >
+          Description
+        </span>
+      </div>
+    </div>
+  `)
+
+  // dynamic content
+  instance.update(
+    <StaticField>
+      <StaticField.Label>Label</StaticField.Label>
+      <StaticField.Input id="input-id" />
+    </StaticField>
   )
 
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <label
-    htmlFor=":r0:"
-  >
-    Label
-  </label>
-  <input
-    aria-describedby=":r1:"
-    id=":r0:"
-  />
-  <div>
-    <p
-      id=":r1:"
-    >
-      Description
-    </p>
-  </div>
-</div>
-`)
+    <div>
+      <label
+        htmlFor="input-id"
+      >
+        Label
+      </label>
+      <input
+        id="input-id"
+      />
+    </div>
+  `)
+
+  // nested slots
+  instance.update(
+    <StaticField>
+      <StaticField.Label>Label</StaticField.Label>
+      <StaticField.Input id="input-id" />
+      <StaticField.Description>
+        <StaticField>
+          <StaticField.Label>Label</StaticField.Label>
+          <StaticField.Input />
+        </StaticField>
+      </StaticField.Description>
+    </StaticField>
+  )
+
+  expect(instance).toMatchInlineSnapshot(`
+    <div>
+      <label
+        htmlFor="input-id"
+      >
+        Label
+      </label>
+      <input
+        aria-describedby=":r1:"
+        id="input-id"
+      />
+      <div>
+        <span
+          id=":r1:"
+        >
+          <div>
+            <label
+              htmlFor=":r0:"
+            >
+              Label
+            </label>
+            <input
+              id=":r0:"
+            />
+          </div>
+        </span>
+      </div>
+    </div>
+  `)
+})
+
+test('static hoisting', () => {
+  expect(StaticField.Description.foo).toBe('Foo')
 })

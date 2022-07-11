@@ -1,10 +1,9 @@
-import React, { useId, useState } from 'react'
-import createListSlots from 'create-slots/list'
-import createSlots from 'create-slots'
+import React, { useState } from 'react'
+import createSlots from 'create-slots/list'
 
 import { Item } from './Item'
 
-const { createHostComponent, SlotComponents, useSlots } = createListSlots({
+const { createHostComponent, SlotComponents, useSlots } = createSlots({
   Item,
   Divider: 'hr',
 })

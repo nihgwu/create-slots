@@ -3,6 +3,7 @@ import * as React from 'react'
 import { getComponentName, useIsomorphicEffect } from './utils'
 import { createSlotsManager } from './list/SlotsManager'
 import { ScanContext, ScanProvider } from './list/ScanContext'
+export type { GetPropsArgs } from './list/SlotsManager'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
@@ -46,7 +47,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
     const TargetComponent = components[name]
     acc[name] =
-      typeof TargetComponent === 'object'
+      typeof TargetComponent !== 'string'
         ? Object.assign({}, TargetComponent, SlotComponentWithKey)
         : SlotComponentWithKey
     return acc

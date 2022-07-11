@@ -25,7 +25,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
     const TargetComponent = components[name]
     acc[name] =
-      typeof TargetComponent === 'object'
+      typeof TargetComponent !== 'string'
         ? Object.assign({}, TargetComponent, SlotComponent)
         : SlotComponent
     return acc
