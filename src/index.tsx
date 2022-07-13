@@ -15,8 +15,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
       React.forwardRef((props, ref) => {
         const Slots = React.useContext(SlotsContext)
 
-        React.useState(() => Slots.register(name, { ...props, ref }))
-        useIsomorphicEffect(() => Slots.update(name, { ...props, ref }))
+        const mergedProps = ref ? { ...props, ref } : props
+        React.useState(() => Slots.register(name, mergedProps))
+        useIsomorphicEffect(() => Slots.update(name, mergedProps))
         useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
 
         return null

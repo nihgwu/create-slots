@@ -8,7 +8,7 @@ export type GetPropsArgs<
 > = {
   [P in K]: {
     name: P
-    props: React.ComponentProps<T[P]>
+    props: React.ComponentPropsWithRef<T[P]>
     index: number
     totalIndex: number
   }

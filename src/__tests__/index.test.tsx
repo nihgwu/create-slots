@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { create } from 'react-test-renderer'
+import { render } from '@testing-library/react'
 
 import { Field } from '../__fixtures__/Field'
 
@@ -200,4 +201,24 @@ test('render slots', () => {
 
 test('static hoisting', () => {
   expect(Field.Description.foo).toBe('Foo')
+})
+
+test('ref', () => {
+  const ref = { current: null }
+  render(
+    <Field>
+      <Field.Label ref={ref}>Label</Field.Label>
+      <Field.Input />
+      <Field.Icon>-</Field.Icon>
+      <Field.Description>Description</Field.Description>
+    </Field>
+  )
+
+  expect(ref.current).toMatchInlineSnapshot(`
+<label
+  for=":r0:"
+>
+  Label
+</label>
+`)
 })

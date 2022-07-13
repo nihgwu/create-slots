@@ -44,16 +44,17 @@ const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
   const id = ':r0:'
   const descriptionId = ':r1:'
-  const inputId = Slots.getProps('Input')?.id || id
+  const inputProps = Slots.getProps('Input')
 
   return (
     <div {...props}>
-      {Slots.render('Label', { htmlFor: inputId })}
-      {Slots.render('Input', {
-        id: inputId,
+      {Slots.render('Label', { htmlFor: inputProps?.id || id })}
+      {Slots.render('Input', undefined, {
+        id,
         'aria-describedby': Slots.has('Description')
           ? descriptionId
           : undefined,
+        ...Slots.getProps('Input'),
       })}
       {(Slots.has('Icon') || Slots.has('Description')) && (
         <div>

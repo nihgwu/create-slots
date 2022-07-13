@@ -19,13 +19,14 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   const SlotComponents = Object.keys(components).reduce((acc, slotName) => {
     const name = slotName as K
     const SlotComponent = React.memo(
-      React.forwardRef(({ $ckeys$: key, ...props }: any, ref) => {
+      React.forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
         const Slots = React.useContext(SlotsContext)
         const Scan = React.useContext(ScanContext)
 
-        !Scan.finished.current && Slots.register(key, name, { ...props, ref })
+        const mergedProps = ref ? { ...props, ref } : props
+        !Scan.finished.current && Slots.register(key, name, mergedProps)
         useIsomorphicEffect(() => {
-          Slots.has(key) && Slots.update(key, name, { ...props, ref })
+          Slots.has(key) && Slots.update(key, name, mergedProps)
         })
         useIsomorphicEffect(() => {
           if (Scan.finished.current) {
@@ -42,7 +43,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     // provide stable key in StrictMode
     const SlotComponentWithKey = React.forwardRef((props: any, ref) => {
       const [key] = React.useState(getId)
-      return <SlotComponent ref={ref} $ckeys$={key} {...props} />
+      return <SlotComponent ref={ref} $slot_key$={key} {...props} />
     }) as unknown as T[K]
 
     const TargetComponent = components[name]

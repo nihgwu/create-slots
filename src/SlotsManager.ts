@@ -18,21 +18,20 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
       propsMap.delete(name)
       onChange?.(name, null)
     },
-    getProps<P extends K>(
-      name: P
-    ): Partial<React.ComponentProps<T[P]>> | undefined {
-      return propsMap.get(name)
+    getProps<P extends K>(name: P) {
+      return propsMap.get(name) as React.ComponentPropsWithRef<T[P]> | undefined
     },
     render<P extends K>(
       name: P,
-      defaultProps?: Partial<React.ComponentProps<T[P]>>
+      defaultProps?: Partial<React.ComponentPropsWithRef<T[P]>>,
+      finalProps?: React.ComponentPropsWithRef<T[P]>
     ) {
       const props = propsMap.get(name)
       if (!props) return null
 
       return React.createElement(
         components[name],
-        defaultProps ? { ...defaultProps, ...props } : props
+        finalProps || (defaultProps ? { ...defaultProps, ...props } : props)
       )
     },
     has(name: K) {

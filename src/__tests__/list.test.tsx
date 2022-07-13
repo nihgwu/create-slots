@@ -221,6 +221,33 @@ test('render slots', () => {
 `)
 })
 
+test('static hoisting', () => {
+  expect(Select.Divider.foo).toBe('Foo')
+})
+
+test('ref', () => {
+  const ref = { current: null }
+  render(
+    <Select>
+      <Select.Item ref={ref} value="foo">
+        Foo
+      </Select.Item>
+      <Select.Divider />
+      <Select.Item value="bar">Bar</Select.Item>
+    </Select>
+  )
+
+  expect(ref.current).toMatchInlineSnapshot(`
+<li
+  aria-selected="false"
+  data-index="0"
+  value="foo"
+>
+  Foo
+</li>
+`)
+})
+
 test('interaction', () => {
   render(
     <Select>
@@ -235,8 +262,4 @@ test('interaction', () => {
 
   fireEvent.click(screen.getAllByRole('listitem')[1])
   expect(screen.getByText('Selected: bar')).not.toBeNull()
-})
-
-test('static hoisting', () => {
-  expect(Select.Divider.foo).toBe('Foo')
 })
