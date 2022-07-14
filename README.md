@@ -20,8 +20,9 @@ type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
 const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
-  const inputId = React.useId()
-  const descriptionId = React.useId()
+  const id = React.useId()
+  const inputId = Slots.getProps('Input').id || `${id}-label`
+  const descriptionId = `${id}-desc`
 
   return (
     <div {...props}>
@@ -49,7 +50,49 @@ Field.displayName = 'Field'
 ```jsx
 <Field>
   <Field.Input />
-  <Field.Label>Field Label</Field.Label>
-  <Field.Description>Field Description</Field.Description>
+  <Field.Label>Label</Field.Label>
+  <Field.Description>Description</Field.Description>
 </Field>
+```
+
+### List slots
+
+```jsx
+import React, { useState } from 'react'
+import createSlots from 'create-slots/list'
+
+const { createHostComponent, SlotComponents, useSlots } = createSlots({
+  Item: 'li',
+  Divider: 'hr',
+})
+
+const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
+  const [selected, setSelected] = useState < React.ReactNode > null
+  const slotItems = useSlots().renderItems(
+    ({ name, props: itemProps, index }) => {
+      if (name === 'Item') {
+        return {
+          ...itemProps,
+          'data-index': index,
+          'aria-selected': itemProps.children === selected,
+          onClick: () => {
+            setSelected(itemProps.value)
+          },
+        }
+      }
+    }
+  )
+
+  return (
+    <div>
+      <div>Selected: {selected}</div>
+      <ul {...props}>{slotItems}</ul>
+    </div>
+  )
+}
+
+export const Select = Object.assign(
+  createHostComponent(SelectBase),
+  SlotComponents
+)
 ```
