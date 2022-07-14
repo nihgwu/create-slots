@@ -1,29 +1,15 @@
 import * as React from 'react'
 
-type ScanContextValue = {
-  finished: React.MutableRefObject<boolean>
-  rescan: () => void
-}
-
-export const ScanContext = React.createContext({} as ScanContextValue)
+// istanbul ignore next
+export const ScanContext = React.createContext({ rescan: () => {} })
 
 export const ScanProvider = ({ children }: { children: React.ReactNode }) => {
-  const finished = React.useRef(false)
-  const [state, rescan] = React.useReducer(() => {
-    finished.current = false
-    return []
-  }, [])
+  const [state, rescan] = React.useReducer(() => [], [])
 
-  const value = React.useMemo<ScanContextValue>(
-    () => ({ finished, rescan }),
+  const value = React.useMemo(
+    () => ({ rescan }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]
   )
-  React.useEffect(() => {
-    finished.current = true
-    return () => {
-      finished.current = false
-    }
-  }, [state])
-
   return <ScanContext.Provider value={value}>{children}</ScanContext.Provider>
 }

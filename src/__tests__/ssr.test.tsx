@@ -23,7 +23,9 @@ test('default SSR', () => {
     </Field>
   )
 
-  expect(markup).toMatchInlineSnapshot(`"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`)
+  expect(markup).toMatchInlineSnapshot(
+    `"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`
+  )
 
   // arbitrary order
   const markup1 = renderToStaticMarkup(
@@ -56,7 +58,9 @@ test('static SSR', () => {
     </StaticField>
   )
 
-  expect(markup).toMatchInlineSnapshot(`"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`)
+  expect(markup).toMatchInlineSnapshot(
+    `"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`
+  )
 
   // arbitrary order
   const markup1 = renderToStaticMarkup(

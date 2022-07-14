@@ -24,15 +24,13 @@ const createSlots = <T extends Record<string, React.ElementType>>(
         const Scan = React.useContext(ScanContext)
 
         const mergedProps = ref ? { ...props, ref } : props
-        !Scan.finished.current && Slots.register(key, name, mergedProps)
+        Slots.register(key, name, mergedProps)
         useIsomorphicEffect(() => {
           Slots.has(key) && Slots.update(key, name, mergedProps)
         })
         useIsomorphicEffect(() => {
-          if (Scan.finished.current) {
-            Slots.clear()
-            Scan.rescan()
-          }
+          Slots.clear()
+          Scan.rescan()
           return () => Slots.unmount(key)
         }, [Slots])
 
