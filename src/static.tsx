@@ -20,7 +20,11 @@ const createSlots = <T extends Record<string, React.ElementType>>(
       return null
     }) as unknown as T[K]
 
-    acc[name] = SlotComponent
+    const TargetComponent = components[name]
+    acc[name] =
+      typeof TargetComponent !== 'string'
+        ? Object.assign({}, TargetComponent, SlotComponent)
+        : SlotComponent
     return acc
   }, {} as T)
 

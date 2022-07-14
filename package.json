@@ -18,6 +18,7 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.umd.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.modern.js",
@@ -28,6 +29,11 @@
       "import": "./dist/static.modern.js",
       "require": "./dist/static.js",
       "types": "./dist/static.d.ts"
+    },
+    "./list": {
+      "import": "./dist/list.modern.js",
+      "require": "./dist/list.js",
+      "types": "./dist/list.d.ts"
     }
   },
   "sideEffects": false,
@@ -45,6 +51,7 @@
     "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
+    "@testing-library/react": "^13.3.0",
     "@types/jest": "^28.1.1",
     "@types/react": "^18.0.10",
     "@types/react-test-renderer": "^18.0.0",
@@ -52,6 +59,7 @@
     "jest-environment-jsdom": "^28.1.0",
     "microbundle": "^0.15.0",
     "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "react-test-renderer": "^18.1.0",
     "ts-jest": "^28.0.4",
     "typescript": "^4.7.3"
@@ -69,7 +77,8 @@
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}"
+      "src/**/*.{ts,tsx}",
+      "!src/__fixtures__/**"
     ],
     "coverageThreshold": {
       "global": {

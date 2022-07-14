@@ -1,18 +1,25 @@
 import * as React from 'react'
-import createSlots from 'create-slots'
+
+import createSlots from '../static'
+
+const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
+  <span {...props} />
+)
 
 const { createHostComponent, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
-  Description: 'div',
+  Description: Object.assign(Description, { foo: 'Foo' }),
+  Icon: 'span',
 })
 
 type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
 const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
-  const inputId = React.useId()
-  const descriptionId = React.useId()
+  const id = ':r0:'
+  const descriptionId = ':r1:'
+  const inputId = Slots.getProps('Input')?.id || id
 
   return (
     <div {...props}>
@@ -23,16 +30,17 @@ const FieldBase: React.FC<FieldProps> = (props) => {
           ? descriptionId
           : undefined,
       })}
-      {Slots.render('Description', {
-        id: descriptionId,
-        style: { color: 'gray' },
-      })}
+      {(Slots.has('Icon') || Slots.has('Description')) && (
+        <div>
+          {Slots.render('Icon')}
+          {Slots.render('Description', { id: descriptionId })}
+        </div>
+      )}
     </div>
   )
 }
 
-export const Field = Object.assign(
+export const StaticField = Object.assign(
   createHostComponent(FieldBase),
   SlotComponents
 )
-Field.displayName = 'Field'

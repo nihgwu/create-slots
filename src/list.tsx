@@ -1,7 +1,9 @@
 import * as React from 'react'
 
 import { getComponentName, useIsomorphicEffect } from './utils'
-import { createSlotsManager } from './SlotsManager'
+import { createSlotsManager } from './list/SlotsManager'
+import { ScanContext, ScanProvider } from './list/ScanContext'
+export type { GetPropsArgs } from './list/SlotsManager'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
@@ -9,26 +11,46 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   type K = keyof T
   const SlotsContext = React.createContext(createSlotsManager(components))
 
+  let _id = 0
+  const getId = () => {
+    return `$c${_id++}s$`
+  }
+
   const SlotComponents = Object.keys(components).reduce((acc, slotName) => {
     const name = slotName as K
     const SlotComponent = React.memo(
-      React.forwardRef((props, ref) => {
+      React.forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
         const Slots = React.useContext(SlotsContext)
+        const Scan = React.useContext(ScanContext)
 
         const mergedProps = ref ? { ...props, ref } : props
-        React.useState(() => Slots.register(name, mergedProps))
-        useIsomorphicEffect(() => Slots.update(name, mergedProps))
-        useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
+        !Scan.finished.current && Slots.register(key, name, mergedProps)
+        useIsomorphicEffect(() => {
+          Slots.has(key) && Slots.update(key, name, mergedProps)
+        })
+        useIsomorphicEffect(() => {
+          if (Scan.finished.current) {
+            Slots.clear()
+            Scan.rescan()
+          }
+          return () => Slots.unmount(key)
+        }, [Slots])
 
         return null
       })
     ) as unknown as T[K]
 
+    // provide stable key in StrictMode
+    const SlotComponentWithKey = React.forwardRef((props: any, ref) => {
+      const [key] = React.useState(getId)
+      return <SlotComponent ref={ref} $slot_key$={key} {...props} />
+    }) as unknown as T[K]
+
     const TargetComponent = components[name]
     acc[name] =
       typeof TargetComponent !== 'string'
-        ? Object.assign({}, TargetComponent, SlotComponent)
-        : SlotComponent
+        ? Object.assign({}, TargetComponent, SlotComponentWithKey)
+        : SlotComponentWithKey
     return acc
   }, {} as T)
 
@@ -42,9 +64,10 @@ const createSlots = <T extends Record<string, React.ElementType>>(
           () => createSlotsManager(components, forceUpdate),
           [forceUpdate]
         )
+
         return (
           <SlotsContext.Provider value={Slots}>
-            {children}
+            <ScanProvider>{children}</ScanProvider>
             <Component ref={ref} {...props} />
           </SlotsContext.Provider>
         )
