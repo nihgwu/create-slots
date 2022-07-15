@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { createElement } from 'react'
 
 type Key = React.Key
 
@@ -47,7 +47,7 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
     },
     renderItems(getItemProps?: (args: GetPropsArgs<T>) => object | undefined) {
       return this.getItems().map(({ key, name, props, ...rest }) => {
-        return React.createElement(components[name], {
+        return createElement(components[name], {
           key,
           ...(getItemProps?.({ name, props: props as any, ...rest }) || props),
         })

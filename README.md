@@ -6,6 +6,7 @@ Bring slots to React components, with SSR support
 🤖 Inversion of Control  
 🤞 A11y support in ease  
 🎨 Server Side Rendering  
+🍀 StrictMode compliant  
 💪 Best TypeScript support  
 🪶 Lightweight (< 700B)
 
@@ -14,10 +15,10 @@ Bring slots to React components, with SSR support
 1. Create your component with slots
 
 ```tsx
-import * as React from 'react'
+import React, { useId } from 'react'
 import createSlots from 'create-slots'
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: 'div',
@@ -27,8 +28,8 @@ type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
 const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
-  const id = React.useId()
-  const inputId = Slots.getProps('Input').id || `${id}-label`
+  const id = useId()
+  const inputId = Slots.getProps('Input')?.id || `${id}-label`
   const descriptionId = Slots.has('Description') ? `${id}-desc` : undefined
 
   return (
@@ -43,10 +44,7 @@ const FieldBase: React.FC<FieldProps> = (props) => {
   )
 }
 
-export const Field = Object.assign(
-  createHostComponent(FieldBase),
-  SlotComponents
-)
+export const Field = Object.assign(createHost(FieldBase), SlotComponents)
 ```
 
 2. Use it
@@ -65,7 +63,7 @@ export const Field = Object.assign(
 import React, { useState } from 'react'
 import createSlots from 'create-slots/list'
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Item: 'li',
   Divider: 'hr',
 })
@@ -95,10 +93,7 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
   )
 }
 
-export const Select = Object.assign(
-  createHostComponent(SelectBase),
-  SlotComponents
-)
+export const Select = Object.assign(createHost(SelectBase), SlotComponents)
 ```
 
 ## License
