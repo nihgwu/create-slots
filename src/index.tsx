@@ -18,7 +18,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   const SlotsContext = createContext(createSlotsManager(components))
   const useSlots = () => useContext(SlotsContext)
 
-  const createSlot = <P extends K>(name: P) => {
+  const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
     const Slot = memo(
       forwardRef((props, ref) => {
         const Slots = useSlots()
@@ -33,11 +33,8 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     ) as unknown as T[K]
 
     const Target = components[name]
-    return typeof Target !== 'string' ? Object.assign({}, Target, Slot) : Slot
-  }
-
-  const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    acc[name] = createSlot(name)
+    acc[name] =
+      typeof Target !== 'string' ? Object.assign({}, Target, Slot) : Slot
     return acc
   }, {} as T)
 
@@ -64,7 +61,6 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     SlotsContext,
     SlotComponents,
     createHost,
-    createSlot,
     useSlots,
   }
 }
