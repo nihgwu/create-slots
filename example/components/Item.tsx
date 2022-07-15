@@ -6,7 +6,7 @@ type ItemProps = Omit<React.ComponentPropsWithoutRef<'li'>, 'value'> & {
 }
 
 const { createHost, SlotComponents, useSlots } = createSlots({
-  Title: 'h3',
+  Title: 'h4',
   Description: 'div',
 })
 

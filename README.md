@@ -15,7 +15,7 @@ Bring slots to React components, with SSR support
 1. Create your component with slots
 
 ```tsx
-import * as React from 'react'
+import React, { useId } from 'react'
 import createSlots from 'create-slots'
 
 const { createHost, SlotComponents, useSlots } = createSlots({
@@ -28,8 +28,8 @@ type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
 const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
-  const id = React.useId()
-  const inputId = Slots.getProps('Input').id || `${id}-label`
+  const id = useId()
+  const inputId = Slots.getProps('Input')?.id || `${id}-label`
   const descriptionId = Slots.has('Description') ? `${id}-desc` : undefined
 
   return (

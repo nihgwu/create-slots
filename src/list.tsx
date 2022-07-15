@@ -1,4 +1,12 @@
-import * as React from 'react'
+import React, {
+  createContext,
+  forwardRef,
+  memo,
+  useContext,
+  useReducer,
+  useState,
+  useMemo,
+} from 'react'
 
 import { getComponentName, useIsomorphicEffect } from './utils'
 import { createSlotsManager } from './list/SlotsManager'
@@ -9,8 +17,8 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
   type K = keyof T
-  const SlotsContext = React.createContext(createSlotsManager(components))
-  const useSlots = () => React.useContext(SlotsContext)
+  const SlotsContext = createContext(createSlotsManager(components))
+  const useSlots = () => useContext(SlotsContext)
 
   let _id = 0
   const getId = () => {
@@ -18,9 +26,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }
 
   const createSlot = <P extends K>(name: P) => {
-    const Slot = React.memo(
-      React.forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
-        const Scan = React.useContext(ScanContext)
+    const Slot = memo(
+      forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
+        const Scan = useContext(ScanContext)
         const Slots = useSlots()
 
         const mergedProps = ref ? { ...props, ref } : props
@@ -39,8 +47,8 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     ) as unknown as T[K]
 
     // provide stable key in StrictMode
-    const SlotWithKey = React.forwardRef((props: any, ref) => {
-      const [key] = React.useState(getId)
+    const SlotWithKey = forwardRef((props: any, ref) => {
+      const [key] = useState(getId)
       return <Slot ref={ref} $slot_key$={key} {...props} />
     }) as unknown as T[K]
 
@@ -56,9 +64,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }, {} as T)
 
   const createHost = <P extends React.ComponentType<any>>(Component: P) => {
-    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
-      const forceUpdate = React.useReducer(() => [], [])[1]
-      const Slots = React.useMemo(
+    const Host = forwardRef(({ children, ...props }: any, ref) => {
+      const forceUpdate = useReducer(() => [], [])[1]
+      const Slots = useMemo(
         () => createSlotsManager(components, forceUpdate),
         [forceUpdate]
       )

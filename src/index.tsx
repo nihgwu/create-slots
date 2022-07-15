@@ -1,4 +1,12 @@
-import * as React from 'react'
+import React, {
+  createContext,
+  forwardRef,
+  memo,
+  useContext,
+  useReducer,
+  useState,
+  useMemo,
+} from 'react'
 
 import { getComponentName, useIsomorphicEffect } from './utils'
 import { createSlotsManager } from './SlotsManager'
@@ -7,16 +15,16 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
   type K = keyof T
-  const SlotsContext = React.createContext(createSlotsManager(components))
-  const useSlots = () => React.useContext(SlotsContext)
+  const SlotsContext = createContext(createSlotsManager(components))
+  const useSlots = () => useContext(SlotsContext)
 
   const createSlot = <P extends K>(name: P) => {
-    const Slot = React.memo(
-      React.forwardRef((props, ref) => {
+    const Slot = memo(
+      forwardRef((props, ref) => {
         const Slots = useSlots()
 
         const mergedProps = ref ? { ...props, ref } : props
-        React.useState(() => Slots.register(name, mergedProps))
+        useState(() => Slots.register(name, mergedProps))
         useIsomorphicEffect(() => Slots.update(name, mergedProps))
         useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
 
@@ -34,9 +42,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }, {} as T)
 
   const createHost = <P extends React.ComponentType<any>>(Component: P) => {
-    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
-      const forceUpdate = React.useReducer(() => [], [])[1]
-      const Slots = React.useMemo(
+    const Host = forwardRef(({ children, ...props }: any, ref) => {
+      const forceUpdate = useReducer(() => [], [])[1]
+      const Slots = useMemo(
         () => createSlotsManager(components, forceUpdate),
         [forceUpdate]
       )

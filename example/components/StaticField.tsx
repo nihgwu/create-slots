@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useId } from 'react'
 import createSlots from 'create-slots/static'
 
 const { createHost, SlotComponents, useSlots } = createSlots({
@@ -11,17 +11,16 @@ type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
 const FieldBase: React.FC<FieldProps> = (props) => {
   const Slots = useSlots()
-  const inputId = React.useId()
-  const descriptionId = React.useId()
+  const id = useId()
+  const inputId = Slots.getProps('Input')?.id || `${id}-label`
+  const descriptionId = Slots.has('Description') ? `${id}-desc` : undefined
 
   return (
     <div {...props}>
       {Slots.render('Label', { htmlFor: inputId })}
       {Slots.render('Input', {
         id: inputId,
-        'aria-describedby': Slots.has('Description')
-          ? descriptionId
-          : undefined,
+        'aria-describedby': descriptionId,
       })}
       {Slots.render('Description', {
         id: descriptionId,
@@ -31,8 +30,5 @@ const FieldBase: React.FC<FieldProps> = (props) => {
   )
 }
 
-export const StaticField = Object.assign(
-  createHost(FieldBase),
-  SlotComponents
-)
+export const StaticField = Object.assign(createHost(FieldBase), SlotComponents)
 StaticField.displayName = 'StaticField'
