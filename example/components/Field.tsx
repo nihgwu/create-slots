@@ -1,7 +1,7 @@
 import * as React from 'react'
 import createSlots from 'create-slots'
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: 'div',
@@ -32,7 +32,7 @@ const FieldBase: React.FC<FieldProps> = (props) => {
 }
 
 export const Field = Object.assign(
-  createHostComponent(FieldBase),
+  createHost(FieldBase),
   SlotComponents
 )
 Field.displayName = 'Field'

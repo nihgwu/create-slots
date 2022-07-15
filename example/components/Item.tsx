@@ -5,7 +5,7 @@ type ItemProps = Omit<React.ComponentPropsWithoutRef<'li'>, 'value'> & {
   value: string
 }
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Title: 'h3',
   Description: 'div',
 })
@@ -24,4 +24,4 @@ const ItemBase = (props: ItemProps) => {
   )
 }
 
-export const Item = Object.assign(createHostComponent(ItemBase), SlotComponents)
+export const Item = Object.assign(createHost(ItemBase), SlotComponents)

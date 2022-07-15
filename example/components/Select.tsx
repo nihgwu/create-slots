@@ -3,7 +3,7 @@ import createSlots from 'create-slots/list'
 
 import { Item } from './Item'
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Item,
   Divider: 'hr',
 })
@@ -34,6 +34,6 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
 }
 
 export const Select = Object.assign(
-  createHostComponent(SelectBase),
+  createHost(SelectBase),
   SlotComponents
 )

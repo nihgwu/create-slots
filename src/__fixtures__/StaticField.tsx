@@ -6,7 +6,7 @@ const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />
 )
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: Object.assign(Description, { foo: 'Foo' }),
@@ -40,7 +40,4 @@ const FieldBase: React.FC<FieldProps> = (props) => {
   )
 }
 
-export const StaticField = Object.assign(
-  createHostComponent(FieldBase),
-  SlotComponents
-)
+export const StaticField = Object.assign(createHost(FieldBase), SlotComponents)

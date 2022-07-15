@@ -6,7 +6,7 @@ const Divider = (props: React.ComponentPropsWithoutRef<'hr'>) => (
   <hr {...props} />
 )
 
-const { createHostComponent, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Item: 'li',
   Divider: Object.assign(Divider, { foo: 'Foo' }),
 })
@@ -36,7 +36,4 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
   )
 }
 
-export const Select = Object.assign(
-  createHostComponent(SelectBase),
-  SlotComponents
-)
+export const Select = Object.assign(createHost(SelectBase), SlotComponents)
