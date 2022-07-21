@@ -1,8 +1,7 @@
 import { createElement } from 'react'
 
 export const createSlotsManager = <T extends Record<string, React.ElementType>>(
-  components: T,
-  onChange: (name: keyof T, props: unknown) => void
+  components: T
 ) => {
   type K = keyof T
   const propsMap = new Map<K, object>()
@@ -10,13 +9,8 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
     register(name: K, props: object) {
       propsMap.set(name, props)
     },
-    update(name: K, props: object) {
-      propsMap.set(name, props)
-      onChange(name, props)
-    },
-    unmount(name: K) {
-      propsMap.delete(name)
-      onChange(name, null)
+    clear() {
+      propsMap.clear()
     },
     getProps<P extends K>(name: P) {
       return propsMap.get(name) as React.ComponentPropsWithRef<T[P]> | undefined

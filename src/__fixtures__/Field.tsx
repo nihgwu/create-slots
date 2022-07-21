@@ -6,22 +6,20 @@ const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />
 )
 
-const { SlotsContext, createHost, SlotComponents, useSlots } = createSlots({
+const { createHost, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
   Description: Object.assign(Description, { foo: 'Foo' }),
   Icon: 'span',
 })
 
-const createFillComponent = <P extends keyof typeof SlotComponents>(
-  name: P
-) => {
+const createFill = <P extends keyof typeof SlotComponents>(name: P) => {
   const FillComponent = React.forwardRef((props, ref) => {
-    const Slots = React.useContext(SlotsContext)
+    const Slots = useSlots()
     const [originalProps] = React.useState(() => Slots.getProps(name))
 
-    React.useLayoutEffect(() => Slots.update(name, { ...props, ref }))
-    React.useLayoutEffect(
+    React.useEffect(() => Slots.update(name, { ...props, ref }))
+    React.useEffect(
       () => () => {
         originalProps ? Slots.update(name, originalProps) : Slots.unmount(name)
       },
@@ -62,5 +60,5 @@ const FieldBase: React.FC<FieldProps> = (props) => {
 }
 
 export const Field = Object.assign(createHost(FieldBase), SlotComponents, {
-  LabelFill: createFillComponent('Label'),
+  LabelFill: createFill('Label'),
 } as const)

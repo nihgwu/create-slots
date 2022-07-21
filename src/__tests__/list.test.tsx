@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { create } from 'react-test-renderer'
 import { render, screen, fireEvent } from '@testing-library/react'
 
+import { create } from '../__fixtures__/utils'
 import { Select } from '../__fixtures__/Select'
 
 test('render slots', () => {

@@ -1,10 +1,17 @@
 import React, { useId } from 'react'
 import createSlots from 'create-slots/static'
 
+const Description = (props: React.ComponentPropsWithoutRef<'div'>) => (
+  <div
+    {...props}
+    style={{ borderLeft: '4px solid lightgray', paddingLeft: 4 }}
+  />
+)
+
 const { createHost, SlotComponents, useSlots } = createSlots({
   Label: 'label',
   Input: 'input',
-  Description: 'div',
+  Description,
 })
 
 type FieldProps = React.ComponentPropsWithoutRef<'div'>
@@ -24,7 +31,6 @@ const FieldBase: React.FC<FieldProps> = (props) => {
       })}
       {Slots.render('Description', {
         id: descriptionId,
-        style: { color: 'gray' },
       })}
     </div>
   )

@@ -1,10 +1,9 @@
 {
-  "main": "../dist/list.js",
-  "module": "../dist/list.esm.js",
-  "unpkg": "../dist/list.umd.js",
-  "types": "../dist/list.d.ts",
+  "main": "../dist/list/index.js",
+  "module": "../dist/list/index.mjs",
+  "types": "../dist/list/index.d.ts",
   "exports": {
-    "import": "./../dist/list.modern.js",
-    "require": "./../dist/list.js"
+    "import": "./../dist/list/index.mjs",
+    "require": "./../dist/list/index.js"
   }
 }

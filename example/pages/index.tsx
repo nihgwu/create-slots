@@ -33,14 +33,18 @@ const Home: NextPage = () => {
               <Field>
                 <Field.Input />
                 <Field.Label>Label</Field.Label>
-                <Field.Description>
-                  Description
-                  <Field>
-                    <Field.Input />
-                    <Field.Label>Label</Field.Label>
-                    <Field.Description>Nested Field</Field.Description>
-                  </Field>
-                </Field.Description>
+                {count % 3 !== 0 && (
+                  <Field.Description>
+                    Description {count}
+                    <Field>
+                      <Field.Input />
+                      <Field.Label>Label</Field.Label>
+                      <Field.Description>
+                        Nested Field {count}
+                      </Field.Description>
+                    </Field>
+                  </Field.Description>
+                )}
               </Field>
             </div>
           </div>
@@ -51,16 +55,18 @@ const Home: NextPage = () => {
               <StaticField>
                 <StaticField.Input />
                 <StaticField.Label>Label</StaticField.Label>
-                <StaticField.Description>
-                  Description
-                  <StaticField>
-                    <StaticField.Input />
-                    <StaticField.Label>Label</StaticField.Label>
-                    <StaticField.Description>
-                      Nested Field
-                    </StaticField.Description>
-                  </StaticField>
-                </StaticField.Description>
+                {count % 3 !== 1 && (
+                  <StaticField.Description>
+                    Description {count}
+                    <StaticField>
+                      <StaticField.Input />
+                      <StaticField.Label>Label</StaticField.Label>
+                      <StaticField.Description>
+                        Nested Field {count}
+                      </StaticField.Description>
+                    </StaticField>
+                  </StaticField.Description>
+                )}
               </StaticField>
             </div>
           </div>
@@ -73,7 +79,7 @@ const Home: NextPage = () => {
                   <Select.Item.Title>Foo</Select.Item.Title>
                 </Select.Item>
                 <Select.Divider />
-                {count % 3 === 2 && (
+                {count % 3 !== 2 && (
                   <>
                     <Select.Item value="bar">
                       <Select.Item.Title>Bar</Select.Item.Title>

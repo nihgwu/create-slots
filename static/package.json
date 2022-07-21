@@ -1,10 +1,9 @@
 {
-  "main": "../dist/static.js",
-  "module": "../dist/static.esm.js",
-  "unpkg": "../dist/static.umd.js",
-  "types": "../dist/static.d.ts",
+  "main": "../dist/static/index.js",
+  "module": "../dist/static/index.mjs",
+  "types": "../dist/static/index.d.ts",
   "exports": {
-    "import": "./../dist/static.modern.js",
-    "require": "./../dist/static.js"
+    "import": "./../dist/static/index.mjs",
+    "require": "./../dist/static/index.js"
   }
 }
