@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { create } from 'react-test-renderer'
 
+import { create } from '../__fixtures__/utils'
 import { StaticField } from '../__fixtures__/StaticField'
 
 test('render slots', () => {

@@ -1,34 +1,32 @@
-import React, { createContext, forwardRef, useContext, useMemo } from 'react'
+import React, { forwardRef, useContext, useMemo } from 'react'
 
+import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
 import { createSlotsManager } from './SlotsManager'
-import { getComponentName, useIsomorphicEffect } from './utils'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
   type K = keyof T
-  const SlotsContext = createContext(createSlotsManager(components))
+  const SlotsContext = createSlotsContext(createSlotsManager(components))
   const useSlots = () => useContext(SlotsContext)
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
     const Slot = forwardRef((props, ref) => {
       const Slots = useContext(SlotsContext)
 
-      useIsomorphicEffect(() => () => Slots.unmount(name), [Slots])
+      Slots.register(name, { ...props, ref })
 
-      Slots.update(name, { ...props, ref })
       return null
     }) as unknown as T[K]
 
-    const Target = components[name]
-    acc[name] =
-      typeof Target !== 'string' ? Object.assign({}, Target, Slot) : Slot
+    acc[name] = hoistStatics(Slot, components[name])
     return acc
   }, {} as T)
 
   const createHost = <P extends React.ComponentType>(Component: P) => {
     const Host = forwardRef(({ children, ...props }: any, ref) => {
       const Slots = useMemo(() => createSlotsManager(components), [])
+      Slots.clear()
       return (
         <SlotsContext.Provider value={Slots}>
           {children}

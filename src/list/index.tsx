@@ -1,23 +1,23 @@
 import React, {
-  createContext,
   forwardRef,
   memo,
   useContext,
+  useEffect,
   useReducer,
   useState,
   useMemo,
 } from 'react'
 
-import { getComponentName, useIsomorphicEffect } from './utils'
-import { createSlotsManager } from './list/SlotsManager'
-import { ScanContext, ScanProvider } from './list/ScanContext'
-export type { GetPropsArgs } from './list/SlotsManager'
+import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
+import { createSlotsManager } from './SlotsManager'
+import { ScanContext, ScanProvider } from './ScanContext'
+export type { GetPropsArgs } from './SlotsManager'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
   type K = keyof T
-  const SlotsContext = createContext(createSlotsManager(components))
+  const SlotsContext = createSlotsContext(createSlotsManager(components))
   const useSlots = () => useContext(SlotsContext)
 
   let _id = 0
@@ -33,10 +33,10 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
         const mergedProps = ref ? { ...props, ref } : props
         Slots.register(key, name, mergedProps)
-        useIsomorphicEffect(() => {
+        useEffect(() => {
           Slots.has(key) && Slots.update(key, name, mergedProps)
         })
-        useIsomorphicEffect(() => {
+        useEffect(() => {
           Slots.clear()
           Scan.rescan()
           return () => Slots.unmount(key)
@@ -52,11 +52,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
       return <Slot ref={ref} $slot_key$={key} {...props} />
     }) as unknown as T[K]
 
-    const Target = components[name]
-    acc[name] =
-      typeof Target !== 'string'
-        ? Object.assign({}, Target, SlotWithKey)
-        : SlotWithKey
+    acc[name] = hoistStatics(SlotWithKey, components[name])
     return acc
   }, {} as T)
 

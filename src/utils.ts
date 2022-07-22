@@ -1,9 +1,19 @@
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { createContext } from 'react'
 
-export const useIsomorphicEffect =
-  // istanbul ignore next
-  typeof window === 'undefined' ? useEffect : useLayoutEffect
+export const createSlotsContext = <T>(defaultValue: T) => {
+  const context = createContext(defaultValue)
+  context.displayName = 'SlotsContext'
+  return context
+}
 
-export const getComponentName = (Component: React.ComponentType) =>
+export const getComponentName = (Component: React.ComponentType) => {
   // istanbul ignore next
-  Component.displayName || Component.name || 'Component'
+  return Component.displayName || Component.name || 'Component'
+}
+
+export const hoistStatics = <T extends React.ElementType>(
+  target: T,
+  source: T
+) => {
+  return typeof source !== 'string' ? Object.assign({}, source, target) : target
+}

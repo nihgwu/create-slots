@@ -24,14 +24,14 @@
       "types": "./dist/index.d.ts"
     },
     "./static": {
-      "import": "./dist/static.mjs",
-      "require": "./dist/static.js",
-      "types": "./dist/static.d.ts"
+      "import": "./dist/static/index.mjs",
+      "require": "./dist/static/index.js",
+      "types": "./dist/static/index.d.ts"
     },
     "./list": {
-      "import": "./dist/list.mjs",
-      "require": "./dist/list.js",
-      "types": "./dist/list.d.ts"
+      "import": "./dist/list/index.mjs",
+      "require": "./dist/list/index.js",
+      "types": "./dist/list/index.d.ts"
     }
   },
   "sideEffects": false,
@@ -43,8 +43,8 @@
   "tsup": {
     "entry": [
       "src/index.tsx",
-      "src/list.tsx",
-      "src/static.tsx"
+      "src/list/index.tsx",
+      "src/static/index.tsx"
     ],
     "format": [
       "esm",

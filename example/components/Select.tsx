@@ -15,11 +15,18 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
       if (name === 'Item') {
         return {
           ...itemProps,
+          role: 'button',
+          tabIndex: 0,
           'data-index': index,
           'aria-selected': itemProps.children === selected,
           onClick: () => {
             setSelected(itemProps.value)
           },
+          onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              setSelected(itemProps.value)
+            }
+          }
         }
       }
     }
