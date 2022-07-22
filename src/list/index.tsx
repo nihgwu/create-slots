@@ -76,12 +76,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     return Host
   }
 
-  return {
-    SlotsContext,
-    SlotComponents,
-    createHost,
-    useSlots,
-  }
+  return { SlotComponents, createHost, useSlots }
 }
 
 export default createSlots
