@@ -3,7 +3,13 @@
   "module": "../dist/list/index.mjs",
   "types": "../dist/list/index.d.ts",
   "exports": {
-    "import": "./../dist/list/index.mjs",
-    "require": "./../dist/list/index.js"
+    "development": {
+      "import": "./../dev/list/index.mjs",
+      "require": "./../dev/list/index.js"
+    },
+    "default": {
+      "import": "./../dist/list/index.mjs",
+      "require": "./../dist/list/index.js"
+    }
   }
 }

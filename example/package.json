@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "yarn --cwd ../ link && yarn link create-slots",
     "dev": "next dev",
     "build": "next build && next export -o build",
-    "start": "next start",
+    "start": "next dev",
     "lint": "next lint"
   },
   "dependencies": {

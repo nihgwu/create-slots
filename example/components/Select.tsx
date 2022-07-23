@@ -26,7 +26,7 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
             if (event.key === 'Enter' || event.key === ' ') {
               setSelected(itemProps.value)
             }
-          }
+          },
         }
       }
     }
@@ -40,7 +40,4 @@ const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
   )
 }
 
-export const Select = Object.assign(
-  createHost(SelectBase),
-  SlotComponents
-)
+export const Select = Object.assign(createHost(SelectBase), SlotComponents)

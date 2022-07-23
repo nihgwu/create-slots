@@ -263,3 +263,27 @@ test('interaction', () => {
   fireEvent.click(screen.getAllByRole('listitem')[1])
   expect(screen.getByText('Selected: bar')).not.toBeNull()
 })
+
+test('dev warning', () => {
+  const warn = jest.spyOn(console, 'warn').mockImplementation()
+  render(
+    <Select>
+      <Select.Item value="foo">Foo</Select.Item>
+      Divider
+    </Select>
+  )
+  expect(warn).toHaveBeenCalledTimes(0)
+
+  // @ts-ignore
+  process.env.NODE_ENV = 'development'
+  render(
+    <Select>
+      <Select.Item value="foo">Foo</Select.Item>
+      Divider
+    </Select>
+  )
+  expect(warn).toHaveBeenCalledTimes(1)
+  expect(warn).toHaveBeenCalledWith(
+    'Unwrapped children found in "Host(SelectBase)", either wrap them in subcomponents or remove'
+  )
+})

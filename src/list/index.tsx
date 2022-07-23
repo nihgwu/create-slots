@@ -9,6 +9,7 @@ import React, {
 } from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
+import { DevChildren } from '../DevChildren'
 import { createSlotsManager } from './SlotsManager'
 import { ScanContext, ScanProvider } from './ScanContext'
 export type { GetPropsArgs } from './SlotsManager'
@@ -40,6 +41,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
           Slots.clear()
           Scan.rescan()
           return () => Slots.unmount(key)
+          // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [Slots])
 
         return null
@@ -57,6 +59,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }, {} as T)
 
   const createHost = <P extends React.ComponentType<any>>(Component: P) => {
+    const displayName = `Host(${getComponentName(Component)})`
     const Host = forwardRef(({ children, ...props }: any, ref) => {
       const forceUpdate = useReducer(() => [], [])[1]
       const Slots = useMemo(
@@ -66,12 +69,18 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
       return (
         <SlotsContext.Provider value={Slots}>
-          <ScanProvider>{children}</ScanProvider>
+          <ScanProvider>
+            {process.env.NODE_ENV === 'development' ? (
+              <DevChildren name={displayName}>{children}</DevChildren>
+            ) : (
+              children
+            )}
+          </ScanProvider>
           <Component ref={ref} {...props} />
         </SlotsContext.Provider>
       )
     }) as unknown as P
-    Host.displayName = `Host(${getComponentName(Component)})`
+    Host.displayName = displayName
 
     return Host
   }

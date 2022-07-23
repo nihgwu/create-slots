@@ -20,5 +20,6 @@ lerna-debug.log.*
 # builds
 coverage
 dist
+dev
 
 .vercel
