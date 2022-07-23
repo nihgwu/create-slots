@@ -16,26 +16,42 @@
   ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./static": {
-      "import": "./dist/static/index.mjs",
-      "require": "./dist/static/index.js",
-      "types": "./dist/static/index.d.ts"
+      "development": {
+        "import": "./dev/index.mjs",
+        "require": "./dev/index.js"
+      },
+      "default": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js"
+      }
     },
     "./list": {
-      "import": "./dist/list/index.mjs",
-      "require": "./dist/list/index.js",
-      "types": "./dist/list/index.d.ts"
+      "development": {
+        "import": "./dev/list/index.mjs",
+        "require": "./dev/list/index.js"
+      },
+      "default": {
+        "import": "./dist/list/index.mjs",
+        "require": "./dist/list/index.js"
+      }
+    },
+    "./static": {
+      "development": {
+        "import": "./dev/static/index.mjs",
+        "require": "./dev/static/index.js"
+      },
+      "default": {
+        "import": "./dist/static/index.mjs",
+        "require": "./dist/static/index.js"
+      }
     }
   },
   "sideEffects": false,
   "files": [
+    "dev",
     "dist",
     "list",
     "static"
@@ -54,16 +70,15 @@
     "target": "es2018",
     "splitting": false,
     "sourcemap": true,
-    "dts": true,
     "clean": true
   },
   "scripts": {
-    "start": "yarn --cwd example dev",
+    "start": "yarn --cwd example start",
     "test": "jest",
     "test:ci": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "tsup --minify",
-    "watch": "tsup --watch",
+    "build": "tsup --minify --dts && tsup --out-dir dev",
+    "watch": "tsup --watch --dts",
     "clean": "rimraf dist",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"

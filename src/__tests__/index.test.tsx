@@ -222,3 +222,27 @@ test('ref', () => {
 </label>
 `)
 })
+
+test('dev warning', () => {
+  const warn = jest.spyOn(console, 'warn').mockImplementation()
+  render(
+    <Field>
+      <Field.Label>Label</Field.Label>
+      Input
+    </Field>
+  )
+  expect(warn).toHaveBeenCalledTimes(0)
+
+  // @ts-ignore
+  process.env.NODE_ENV = 'development'
+  render(
+    <Field>
+      <Field.Label>Label</Field.Label>
+      Input
+    </Field>
+  )
+  expect(warn).toHaveBeenCalledTimes(1)
+  expect(warn).toHaveBeenCalledWith(
+    'Unwrapped children found in "Host(FieldBase)", either wrap them in subcomponents or remove'
+  )
+})

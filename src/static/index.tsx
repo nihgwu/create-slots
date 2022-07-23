@@ -1,6 +1,7 @@
 import React, { forwardRef, useContext, useMemo } from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
+import { DevChildren } from '../DevChildren'
 import { createSlotsManager } from './SlotsManager'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
@@ -24,17 +25,22 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }, {} as T)
 
   const createHost = <P extends React.ComponentType>(Component: P) => {
+    const displayName = `Host(${getComponentName(Component)})`
     const Host = forwardRef(({ children, ...props }: any, ref) => {
       const Slots = useMemo(() => createSlotsManager(components), [])
       Slots.clear()
       return (
         <SlotsContext.Provider value={Slots}>
-          {children}
+          {process.env.NODE_ENV === 'development' ? (
+            <DevChildren name={displayName}>{children}</DevChildren>
+          ) : (
+            children
+          )}
           <Component ref={ref} {...props} />
         </SlotsContext.Provider>
       )
     }) as unknown as P
-    Host.displayName = `Host(${getComponentName(Component)})`
+    Host.displayName = displayName
 
     return Host
   }

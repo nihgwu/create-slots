@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { render } from '@testing-library/react'
 
 import { create } from '../__fixtures__/utils'
 import { StaticField } from '../__fixtures__/StaticField'
@@ -137,4 +138,48 @@ test('render slots', () => {
 
 test('static hoisting', () => {
   expect(StaticField.Description.foo).toBe('Foo')
+})
+
+test('ref', () => {
+  const ref = { current: null }
+  render(
+    <StaticField>
+      <StaticField.Label ref={ref}>Label</StaticField.Label>
+      <StaticField.Input />
+      <StaticField.Icon>-</StaticField.Icon>
+      <StaticField.Description>Description</StaticField.Description>
+    </StaticField>
+  )
+
+  expect(ref.current).toMatchInlineSnapshot(`
+<label
+  for=":r0:"
+>
+  Label
+</label>
+`)
+})
+
+test('dev warning', () => {
+  const warn = jest.spyOn(console, 'warn').mockImplementation()
+  render(
+    <StaticField>
+      <StaticField.Label>Label</StaticField.Label>
+      Input
+    </StaticField>
+  )
+  expect(warn).toHaveBeenCalledTimes(0)
+
+  // @ts-ignore
+  process.env.NODE_ENV = 'development'
+  render(
+    <StaticField>
+      <StaticField.Label>Label</StaticField.Label>
+      Input
+    </StaticField>
+  )
+  expect(warn).toHaveBeenCalledTimes(1)
+  expect(warn).toHaveBeenCalledWith(
+    'Unwrapped children found in "Host(FieldBase)", either wrap them in subcomponents or remove'
+  )
 })
