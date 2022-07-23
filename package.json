@@ -78,7 +78,7 @@
     "test:ci": "jest --coverage",
     "typecheck": "tsc --noEmit",
     "build": "tsup --minify --dts && tsup --out-dir dev",
-    "watch": "tsup --watch --dts",
+    "watch": "tsup --out-dir dev --watch --dts",
     "clean": "rimraf dist",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"
