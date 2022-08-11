@@ -1,6 +1,6 @@
 # create-slots
 
-Bring slots to React components, with SSR support
+Bring [Slots](https://github.com/reactjs/rfcs/pull/223) to React, with SSR support
 
 🧩 Compose with confidence  
 🤖 Inversion of Control  
