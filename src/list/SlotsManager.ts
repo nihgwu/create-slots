@@ -16,7 +16,7 @@ export type GetPropsArgs<
 
 export const createSlotsManager = <T extends Record<string, React.ElementType>>(
   components: T,
-  onChange?: (key: Key, props: object | null) => void
+  onChange?: (key: Key) => void
 ) => {
   type K = keyof T
 
@@ -27,11 +27,11 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
     },
     update(key: Key, name: K, props: object) {
       itemMap.set(key, { name, props })
-      onChange?.(key, props)
+      onChange?.(key)
     },
     unmount(key: Key) {
       itemMap.delete(key)
-      onChange?.(key, null)
+      onChange?.(key)
     },
     clear() {
       itemMap.clear()
