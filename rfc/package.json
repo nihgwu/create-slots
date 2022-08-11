@@ -1,0 +1,15 @@
+{
+  "main": "../dist/rfc/index.js",
+  "module": "../dist/rfc/index.mjs",
+  "types": "../dist/rfc/index.d.ts",
+  "exports": {
+    "development": {
+      "import": "./../dev/rfc/index.mjs",
+      "require": "./../dev/rfc/index.js"
+    },
+    "default": {
+      "import": "./../dist/rfc/index.mjs",
+      "require": "./../dist/rfc/index.js"
+    }
+  }
+}

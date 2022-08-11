@@ -1,0 +1,15 @@
+{
+  "main": "../dist/simple/index.js",
+  "module": "../dist/simple/index.mjs",
+  "types": "../dist/simple/index.d.ts",
+  "exports": {
+    "development": {
+      "import": "./../dev/simple/index.mjs",
+      "require": "./../dev/simple/index.js"
+    },
+    "default": {
+      "import": "./../dist/simple/index.mjs",
+      "require": "./../dist/simple/index.js"
+    }
+  }
+}

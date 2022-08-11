@@ -6,7 +6,8 @@ export const createSlotsContext = <T>(defaultValue: T) => {
   return context
 }
 
-export const getComponentName = (Component: React.ComponentType) => {
+export const getComponentName = (Component: React.ElementType) => {
+  if (typeof Component === 'string') return Component
   // istanbul ignore next
   return Component.displayName || Component.name || 'Component'
 }

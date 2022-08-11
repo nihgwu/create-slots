@@ -10,8 +10,8 @@ import React, {
 
 import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
 import { DevChildren } from '../DevChildren'
+import { ScanContext, ScanProvider } from '../ScanContext'
 import { createSlotsManager } from './SlotsManager'
-import { ScanContext, ScanProvider } from './ScanContext'
 export type { GetPropsArgs } from './SlotsManager'
 
 const createSlots = <T extends Record<string, React.ElementType>>(
