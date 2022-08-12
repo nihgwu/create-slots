@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type SlotElement<T extends React.ElementType> = React.ReactElement<
+export type SlotElement<T extends React.ElementType = any> = React.ReactElement<
   React.ComponentPropsWithRef<T>,
   T
 > & {

@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { SlotElement } from './utils'
+
 type Key = React.Key
 
 export const createSlotsManager = (onChange: (key: Key) => void) => {
@@ -23,7 +25,7 @@ export const createSlotsManager = (onChange: (key: Key) => void) => {
       return itemMap.has(key)
     },
     get() {
-      return Array.from(itemMap.values())
+      return Array.from(itemMap.values()) as SlotElement[]
     },
   }
 }

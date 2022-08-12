@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { createHost, createSlot } from 'create-slots/rfc'
 
 import { Item } from './RFCItem'
@@ -8,12 +8,13 @@ const SelectDivider = createSlot('hr')
 
 export const Select = (props: React.ComponentProps<'ul'>) => {
   const [selected, setSelected] = useState<React.ReactNode>(null)
+  const indexRef = useRef(0)
 
   return (
     <div>
       <div>Selected: {selected}</div>
       {createHost(props.children, (slots) => {
-        let index = 0
+        indexRef.current = 0
         return (
           <ul {...props}>
             {slots.map((slot) => {
@@ -23,11 +24,11 @@ export const Select = (props: React.ComponentProps<'ul'>) => {
                 return (
                   <Item
                     key={slot.key}
-                    {...slot.props}
+                    {...itemProps}
                     {...{
                       role: 'button',
                       tabIndex: 0,
-                      'data-index': index,
+                      'data-index': indexRef.current++,
                       'aria-selected': itemProps.children === selected,
                       onClick: () => {
                         setSelected(itemProps.value)

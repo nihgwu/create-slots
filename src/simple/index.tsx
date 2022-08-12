@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { createSlotsContext, getComponentName } from '../utils'
+import { DevChildren } from '../DevChildren'
 import { createSlotsManager } from './SlotsManager'
 
 type Slots = ReturnType<typeof createSlotsManager>
@@ -27,7 +28,13 @@ export const Host = ({
 
   return (
     <>
-      <SlotsContext.Provider value={Slots}>{children}</SlotsContext.Provider>
+      <SlotsContext.Provider value={Slots}>
+        {process.env.NODE_ENV === 'development' ? (
+          <DevChildren name={'Host'}>{children}</DevChildren>
+        ) : (
+          children
+        )}
+      </SlotsContext.Provider>
       <Template>{() => callback(Slots)}</Template>
     </>
   )
@@ -37,7 +44,7 @@ export const createHost = (children: React.ReactNode, callback: Callback) => {
   return <Host children={children} callback={callback} />
 }
 
-export const createSlot = <T extends React.ElementType>(Fallback: T) => {
+export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
   const ForwardRef = (props: any, ref: any) => {
     const Slots = React.useContext(SlotsContext)
     if (!Slots) return Fallback ? <Fallback ref={ref} {...props} /> : null

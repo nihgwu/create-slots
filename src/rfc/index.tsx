@@ -1,13 +1,15 @@
 import * as React from 'react'
 
 import { createSlotsContext, getComponentName } from '../utils'
+import { DevChildren } from '../DevChildren'
 import { ScanContext, ScanProvider } from '../ScanContext'
 import { createSlotsManager } from './SlotsManager'
+import { SlotElement } from './utils'
 
-export * from '../utils'
+export * from './utils'
 
 type Slots = ReturnType<typeof createSlotsManager>
-type Callback = (Slots: React.ReactElement[]) => JSX.Element | null
+type Callback = (slots: SlotElement[]) => JSX.Element | null
 
 const SlotsContext = createSlotsContext<Slots | undefined>(undefined)
 
@@ -15,7 +17,7 @@ const Template = ({ children }: { children: () => ReturnType<Callback> }) => {
   return children()
 }
 
-const createIdGenerator = (prefix = '') => {
+const createIdGenerator = (prefix: string) => {
   let id = 0
   return () => `${prefix}_${id++}`
 }
@@ -38,7 +40,13 @@ export const Host = ({
   return (
     <>
       <SlotsContext.Provider value={Slots}>
-        <ScanProvider>{children}</ScanProvider>
+        <ScanProvider>
+          {process.env.NODE_ENV === 'development' ? (
+            <DevChildren name={'Host'}>{children}</DevChildren>
+          ) : (
+            children
+          )}
+        </ScanProvider>
       </SlotsContext.Provider>
       <Template>{() => callback(Slots.get())}</Template>
     </>
@@ -55,6 +63,7 @@ export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
   const Slot = React.forwardRef(
     ({ $slot_key$: key, ...props }: any, ref: any) => {
       const Slots = React.useContext(SlotsContext)
+      // istanbul ignore next
       if (!Slots) return null
       /* eslint-disable react-hooks/rules-of-hooks */
       const Scan = React.useContext(ScanContext)
