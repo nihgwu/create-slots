@@ -1,6 +1,13 @@
 import * as React from 'react'
 
-import { createHost, createSlot, getSlot, getLastSlot, getSlots } from '../rfc'
+import {
+  createHost,
+  createSlot,
+  getSlot,
+  getLastSlot,
+  getSlots,
+  getSlotProps,
+} from '../rfc'
 
 const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />
@@ -16,19 +23,23 @@ type FieldProps = React.ComponentPropsWithoutRef<'div'>
 export const Field = (props: FieldProps) => {
   return createHost(props.children, (slots) => {
     const labelSlot = getSlot(slots, FieldLabel)
-    const lastLabelSlot = getLastSlot(slots, FieldLabel)
+    const lastLabelProps = getSlotProps(getLastSlot(slots, FieldLabel))
     const inputSlot = getSlot(slots, FieldInput)
-    const lastInputSlot = getLastSlot(slots, FieldInput)
-    const lastDescriptionSlot = getLastSlot(slots, FieldDescription)
+    const lastInputProps = getSlotProps(getLastSlot(slots, FieldInput))
+    const descriptionSlot = getSlot(slots, FieldDescription)
+    const lastDescriptionProps = getSlotProps(
+      getLastSlot(slots, FieldDescription)
+    )
     const icons = getSlots(slots, FieldIcon)
     return (
       <div {...props}>
-        {lastLabelSlot && <label {...lastLabelSlot.props} />}
-        {lastInputSlot && <input {...lastInputSlot.props} />}
-        {lastDescriptionSlot}
+        {lastLabelProps && <label {...lastLabelProps} />}
+        {lastInputProps && <input {...lastInputProps} />}
+        {lastDescriptionProps && <Description {...lastDescriptionProps} />}
         {icons}
         {labelSlot}
         {inputSlot}
+        {descriptionSlot}
       </div>
     )
   })

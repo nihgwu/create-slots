@@ -32,3 +32,13 @@ export const getLastSlot = <T extends React.ElementType>(
   }
   return undefined
 }
+
+export const getSlotProps = <T extends SlotElement>(slotElement?: T) => {
+  if (!slotElement) return undefined
+
+  type Props = React.ComponentPropsWithRef<
+    T extends SlotElement<infer P> ? P : never
+  >
+  const { key, ref, props } = slotElement
+  return { ...props, key, ref } as Props
+}

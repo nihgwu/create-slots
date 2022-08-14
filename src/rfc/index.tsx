@@ -24,7 +24,7 @@ const createIdGenerator = (prefix: string) => {
 
 const genSlotId = createIdGenerator('s')
 
-export const Host = ({
+export const HostSlots = ({
   children,
   callback,
 }: {
@@ -42,7 +42,7 @@ export const Host = ({
       <SlotsContext.Provider value={Slots}>
         <ScanProvider>
           {process.env.NODE_ENV === 'development' ? (
-            <DevChildren name={'Host'}>{children}</DevChildren>
+            <DevChildren name="HostSlots">{children}</DevChildren>
           ) : (
             children
           )}
@@ -54,7 +54,7 @@ export const Host = ({
 }
 
 export const createHost = (children: React.ReactNode, callback: Callback) => {
-  return <Host children={children} callback={callback} />
+  return <HostSlots children={children} callback={callback} />
 }
 
 export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
