@@ -180,6 +180,6 @@ test('dev warning', () => {
   )
   expect(warn).toHaveBeenCalledTimes(1)
   expect(warn).toHaveBeenCalledWith(
-    'Unwrapped children found in "Host(FieldBase)", either wrap them in subcomponents or remove'
+    'Unwrapped children found in "Host(FieldBase)", either wrap them in slots or remove'
   )
 })
