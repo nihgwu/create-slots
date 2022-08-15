@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { createHost, createSlot } from '../rfc'
+import { createHost, createSlot, isSlot, getSlotProps } from '../rfc'
 
 const Divider = (props: React.ComponentPropsWithoutRef<'hr'>) => (
   <hr {...props} />
@@ -21,14 +21,10 @@ export const Select = (props: React.ComponentPropsWithoutRef<'ul'>) => {
         return (
           <ul {...props}>
             {slots.map((slot) => {
-              if (slot.type === SelectItem) {
-                const itemProps = slot.props
-
+              if (isSlot(slot, SelectItem)) {
                 return (
                   <li
-                    key={slot.key}
-                    ref={slot.ref}
-                    {...itemProps}
+                    {...getSlotProps(slot)}
                     {...{
                       'data-index': indexRef.current++,
                       'aria-selected': slot === selected,

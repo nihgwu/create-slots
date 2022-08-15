@@ -33,6 +33,13 @@ export const getLastSlot = <T extends React.ElementType>(
   return undefined
 }
 
+export const isSlot = <T extends React.ElementType>(
+  slotElement: SlotElement,
+  slot: T
+): slotElement is SlotElement<T> => {
+  return slotElement.type === slot
+}
+
 export const getSlotProps = <T extends SlotElement>(slotElement?: T) => {
   if (!slotElement) return undefined
 
