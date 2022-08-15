@@ -134,6 +134,68 @@ test('render slots', () => {
       </div>
     </div>
   `)
+  // filling slots
+  instance.update(
+    <Field>
+      <Field.Label>Label</Field.Label>
+      <Field.Input id="input-id" />
+      <Field.Description>
+        Description
+        <Field.LabelFill>Filled Label</Field.LabelFill>
+      </Field.Description>
+    </Field>
+  )
+
+  expect(instance).toMatchInlineSnapshot(`
+    <div>
+      <label
+        htmlFor="input-id"
+      >
+        Filled Label
+      </label>
+      <input
+        aria-describedby=":r1:"
+        id="input-id"
+      />
+      <div>
+        <span
+          id=":r1:"
+        >
+          Description
+        </span>
+      </div>
+    </div>
+  `)
+
+  // unmount filling slots
+  instance.update(
+    <Field>
+      <Field.Label>Label</Field.Label>
+      <Field.Input id="input-id" />
+      <Field.Description>Description</Field.Description>
+    </Field>
+  )
+
+  expect(instance).toMatchInlineSnapshot(`
+    <div>
+      <label
+        htmlFor="input-id"
+      >
+        Label
+      </label>
+      <input
+        aria-describedby=":r1:"
+        id="input-id"
+      />
+      <div>
+        <span
+          id=":r1:"
+        >
+          Description
+        </span>
+      </div>
+    </div>
+  `)
 })
 
 test('ref', () => {

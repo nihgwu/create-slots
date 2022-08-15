@@ -11,23 +11,26 @@ const FieldInput = createSlot('input')
 const FieldDescription = createSlot(Description)
 const FieldIcon = createSlot('span')
 
-// const createFill = <P extends keyof typeof SlotComponents>(name: P) => {
-//   const FillComponent = React.forwardRef((props, ref) => {
-//     const Slots = useSlots()
-//     const [originalProps] = React.useState(() => Slots.getProps(name))
+type Slots = Parameters<Parameters<typeof createHost>[1]>[0]
+const FillContext = React.createContext<Slots | undefined>(undefined)
 
-//     React.useEffect(() => Slots.update(name, { ...props, ref }))
-//     React.useEffect(
-//       () => () => {
-//         originalProps ? Slots.update(name, originalProps) : Slots.unmount(name)
-//       },
-//       [Slots, originalProps]
-//     )
+const createFill = <T extends React.ElementType>(Slot: T) => {
+  const FillComponent = React.forwardRef((props: any, ref) => {
+    const Slots = React.useContext(FillContext)!
+    const [original] = React.useState(() => Slots.get(Slot))
 
-//     return null
-//   }) as unknown as typeof SlotComponents[P]
-//   return FillComponent
-// }
+    React.useEffect(() => Slots.update(Slot, <Slot ref={ref} {...props} />))
+    React.useEffect(
+      () => () => {
+        original ? Slots.update(Slot, original) : Slots.unmount(Slot)
+      },
+      [Slots, original]
+    )
+
+    return null
+  }) as unknown as T
+  return FillComponent
+}
 
 type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
@@ -41,24 +44,28 @@ export const Field = (props: FieldProps) => {
     const descriptionProps = Slots.getProps(FieldDescription)
     const iconProps = Slots.getProps(FieldIcon)
     return (
-      <div {...props}>
-        {labelProps && <label {...labelProps} htmlFor={inputProps?.id || id} />}
-        {inputProps && (
-          <input
-            id={id}
-            aria-describedby={descriptionProps ? descriptionId : undefined}
-            {...inputProps}
-          />
-        )}
-        {(iconProps || descriptionProps) && (
-          <div>
-            {Slots.get(FieldIcon)}
-            {descriptionProps && (
-              <span {...descriptionProps} id={descriptionId} />
-            )}
-          </div>
-        )}
-      </div>
+      <FillContext.Provider value={Slots}>
+        <div {...props}>
+          {labelProps && (
+            <label {...labelProps} htmlFor={inputProps?.id || id} />
+          )}
+          {inputProps && (
+            <input
+              id={id}
+              aria-describedby={descriptionProps ? descriptionId : undefined}
+              {...inputProps}
+            />
+          )}
+          {(iconProps || descriptionProps) && (
+            <div>
+              {Slots.get(FieldIcon)}
+              {descriptionProps && (
+                <span {...descriptionProps} id={descriptionId} />
+              )}
+            </div>
+          )}
+        </div>
+      </FillContext.Provider>
     )
   })
 }
@@ -67,3 +74,4 @@ Field.Label = FieldLabel
 Field.Input = FieldInput
 Field.Description = FieldDescription
 Field.Icon = FieldIcon
+Field.LabelFill = createFill(FieldLabel)
