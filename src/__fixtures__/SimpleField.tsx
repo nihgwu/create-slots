@@ -8,7 +8,7 @@ const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
 
 const FieldLabel = createSlot<'label'>()
 const FieldInput = createSlot('input')
-const FieldDescription = createSlot(Description)
+const FieldDescription = createSlot(Object.assign(Description, { foo: 'Foo' }))
 const FieldIcon = createSlot('span')
 
 type Slots = Parameters<Parameters<typeof createHost>[1]>[0]

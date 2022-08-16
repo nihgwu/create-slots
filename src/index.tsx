@@ -1,6 +1,5 @@
 import React, {
   forwardRef,
-  memo,
   useContext,
   useEffect,
   useReducer,
@@ -24,18 +23,16 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   const useSlots = () => useContext(SlotsContext)
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = memo(
-      forwardRef((props, ref) => {
-        const Slots = useSlots()
+    const Slot = forwardRef((props, ref) => {
+      const Slots = useSlots()
 
-        const mergedProps = ref ? { ...props, ref } : props
-        useState(() => Slots.register(name, mergedProps))
-        useEffect(() => Slots.update(name, mergedProps))
-        useEffect(() => () => Slots.unmount(name), [Slots])
+      const mergedProps = ref ? { ...props, ref } : props
+      useState(() => Slots.register(name, mergedProps))
+      useEffect(() => Slots.update(name, mergedProps))
+      useEffect(() => () => Slots.unmount(name), [Slots])
 
-        return null
-      })
-    ) as unknown as T[K]
+      return null
+    }) as unknown as T[K]
 
     acc[name] = hoistStatics(Slot, components[name])
     return acc

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { createSlotsContext, getComponentName } from '../utils'
+import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
 import { DevChildren } from '../DevChildren'
 import { ScanContext, ScanProvider } from '../ScanContext'
 import { createSlotsManager } from './SlotsManager'
@@ -99,5 +99,5 @@ export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
     : 'Slot'
   const SlotWithKey = React.forwardRef(ForwardRef) as unknown as T
 
-  return SlotWithKey
+  return Fallback ? hoistStatics(SlotWithKey, Fallback) : SlotWithKey
 }

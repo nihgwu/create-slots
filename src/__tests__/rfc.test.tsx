@@ -221,6 +221,10 @@ test('render slots', () => {
 `)
 })
 
+test('static hoisting', () => {
+  expect(Select.Divider.foo).toBe('Foo')
+})
+
 test('ref', () => {
   const ref = { current: null }
   render(

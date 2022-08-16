@@ -7,7 +7,7 @@ const Divider = (props: React.ComponentPropsWithoutRef<'hr'>) => (
 )
 
 const SelectItem = createSlot('li')
-const SelectDivider = createSlot(Divider)
+const SelectDivider = createSlot(Object.assign(Divider, { foo: 'Foo' }))
 
 export const Select = (props: React.ComponentPropsWithoutRef<'ul'>) => {
   const [selected, setSelected] = React.useState<string>()

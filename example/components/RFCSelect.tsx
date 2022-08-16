@@ -3,7 +3,7 @@ import { createHost, createSlot, getSlotProps, isSlot } from 'create-slots/list'
 
 import { Item } from './RFCItem'
 
-const SelectItem = createSlot<typeof Item>()
+const SelectItem = createSlot(Item)
 const SelectDivider = createSlot('hr')
 
 export const Select = (props: React.ComponentProps<'ul'>) => {
@@ -50,6 +50,3 @@ export const Select = (props: React.ComponentProps<'ul'>) => {
 
 Select.Item = SelectItem
 Select.Divider = SelectDivider
-
-Select.Item.Title = Item.Title
-Select.Item.Description = Item.Description

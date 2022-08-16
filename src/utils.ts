@@ -12,9 +12,20 @@ export const getComponentName = (Component: React.ElementType) => {
   return Component.displayName || Component.name || 'Component'
 }
 
+const REACT_STATICS = ['$$typeof', 'render', 'displayName']
+
 export const hoistStatics = <T extends React.ElementType>(
   target: T,
   source: T
 ) => {
-  return typeof source !== 'string' ? Object.assign({}, source, target) : target
+  if (typeof source === 'string') return target
+
+  const statics = Object.getOwnPropertyNames(source).reduce((obj, key) => {
+    if (!REACT_STATICS.includes(key)) {
+      obj[key] = (source as any)[key]
+    }
+    return obj
+  }, {} as Record<string, any>)
+
+  return Object.assign(target, statics)
 }
