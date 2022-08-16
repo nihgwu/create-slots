@@ -12,39 +12,41 @@ Bring [Slots](https://github.com/reactjs/rfcs/pull/223) to React, with SSR suppo
 
 ## Usage
 
+### Simple version (only one slot is used per slot type)
+
 1. Create your component with slots
 
 ```tsx
 import React, { useId } from 'react'
-import createSlots from 'create-slots'
+import { createHost, createSlot } from 'create-slots'
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Label: 'label',
-  Input: 'input',
-  Description: 'div',
-})
+const FieldLabel = createSlot('label')
+const FieldInput = createSlot('input')
+const FieldDescription = createSlot('div')
 
 type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
-const FieldBase: React.FC<FieldProps> = (props) => {
-  const Slots = useSlots()
+export const Field = (props: FieldProps) => {
   const id = useId()
-  const inputId = Slots.getProps('Input')?.id || `${id}-label`
-  const descriptionId = Slots.has('Description') ? `${id}-desc` : undefined
 
-  return (
-    <div {...props}>
-      {Slots.render('Label', { htmlFor: inputId })}
-      {Slots.render('Input', {
-        id: inputId,
-        'aria-describedby': descriptionId,
-      })}
-      {Slots.render('Description', { id: descriptionId })}
-    </div>
-  )
+  return createHost(props.children, (Slots) => {
+    const labelProps = Slots.getProps(FieldLabel)
+    const inputProps = Slots.getProps(FieldInput)
+    const inputId = inputProps?.id || id
+
+    return (
+      <div {...props}>
+        {labelProps && <label {...labelProps} htmlFor={inputId} />}
+        <input id={id} {...inputProps} />
+        {Slots.get('Description')}
+      </div>
+    )
+  })
 }
 
-export const Field = Object.assign(createHost(FieldBase), SlotComponents)
+Field.Label = FieldLabel
+Field.Input = FieldInput
+Field.Description = FieldDescription
 ```
 
 2. Use it
@@ -57,43 +59,62 @@ export const Field = Object.assign(createHost(FieldBase), SlotComponents)
 </Field>
 ```
 
-### List slots
+### List slots (fully implemented the [React Slots RFC](https://github.com/reactjs/rfcs/pull/223) with utils)
 
 ```tsx
 import React, { useState } from 'react'
-import createSlots from 'create-slots/list'
+import { createHost, createSlot, getSlotProps, isSlot } from 'create-slots/list'
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Item: 'li',
-  Divider: 'hr',
-})
+const SelectItem = createSlot('li')
+const SelectDivider = createSlot('hr')
 
-const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
-  const [selected, setSelected] = useState<React.ReactNode>(null)
-  const slotItems = useSlots().renderItems(
-    ({ name, props: itemProps, index }) => {
-      if (name === 'Item') {
-        return {
-          ...itemProps,
-          'data-index': index,
-          'aria-selected': itemProps.children === selected,
-          onClick: () => {
-            setSelected(itemProps.value)
-          },
-        }
-      }
-    }
-  )
+type SelectProps = React.FC<React.ComponentPropsWithoutRef<'ul'>>
+
+const Select = (props: SelectProps) => {
+  const [selected, setSelected] = useState<string>()
+  const indexRef = React.useRef(0)
 
   return (
     <div>
-      <div>Selected: {selected}</div>
-      <ul {...props}>{slotItems}</ul>
+      <div>Selected: {selected ?? ''}</div>
+      {createHost(props.children, (slots) => {
+        indexRef.current = 0
+        return (
+          <ul {...props}>
+            {slots.map((slot) => {
+              if (isSlot(slot, SelectItem)) {
+                const slotProps = getSlotProps(slot)
+                return (
+                  <li
+                    {...slotProps}
+                    data-index={indexRef.current++}
+                    aria-selected={slotProps.value === selected}
+                    onClick={() => setSelected(slotProps.value as string)}
+                  />
+                )
+              }
+
+              return slot
+            })}
+          </ul>
+        )
+      })}
     </div>
   )
 }
 
-export const Select = Object.assign(createHost(SelectBase), SlotComponents)
+Select.Item = SelectItem
+Select.Divider = SelectDivider
+```
+
+2. Use it
+
+```tsx
+<Select>
+  <Select.Item value="foo">Foo</Select.Item>
+  <Select.Divider />
+  <Select.Item value="bar">Bar</Select.Item>
+</Select>
 ```
 
 ## License

@@ -47,26 +47,6 @@
         "import": "./dist/static/index.mjs",
         "require": "./dist/static/index.js"
       }
-    },
-    "./simple": {
-      "development": {
-        "import": "./dev/simple/index.mjs",
-        "require": "./dev/simple/index.js"
-      },
-      "default": {
-        "import": "./dist/simple/index.mjs",
-        "require": "./dist/simple/index.js"
-      }
-    },
-    "./rfc": {
-      "development": {
-        "import": "./dev/rfc/index.mjs",
-        "require": "./dev/rfc/index.js"
-      },
-      "default": {
-        "import": "./dist/rfc/index.mjs",
-        "require": "./dist/rfc/index.js"
-      }
     }
   },
   "sideEffects": false,
@@ -80,9 +60,7 @@
     "entry": [
       "src/index.tsx",
       "src/list/index.tsx",
-      "src/static/index.tsx",
-      "src/simple/index.tsx",
-      "src/rfc/index.tsx"
+      "src/static/index.tsx"
     ],
     "format": [
       "esm",

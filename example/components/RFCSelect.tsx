@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { createHost, createSlot } from 'create-slots/rfc'
+import { createHost, createSlot, getSlotProps, isSlot } from 'create-slots/list'
 
 import { Item } from './RFCItem'
 
@@ -18,28 +18,22 @@ export const Select = (props: React.ComponentProps<'ul'>) => {
         return (
           <ul {...props}>
             {slots.map((slot) => {
-              if (slot.type === SelectItem) {
-                const itemProps = slot.props
+              if (isSlot(slot, SelectItem)) {
+                const itemProps = getSlotProps(slot)
 
                 return (
                   <Item
                     key={slot.key}
                     {...itemProps}
-                    {...{
-                      role: 'button',
-                      tabIndex: 0,
-                      'data-index': indexRef.current++,
-                      'aria-selected': itemProps.children === selected,
-                      onClick: () => {
+                    role="button"
+                    tabIndex={0}
+                    data-index={indexRef.current++}
+                    aria-selected={itemProps.value === selected}
+                    onClick={() => setSelected(itemProps.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
                         setSelected(itemProps.value)
-                      },
-                      onKeyDown: (
-                        event: React.KeyboardEvent<HTMLButtonElement>
-                      ) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          setSelected(itemProps.value)
-                        }
-                      },
+                      }
                     }}
                   />
                 )

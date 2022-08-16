@@ -1,5 +1,5 @@
 import React, { useId } from 'react'
-import { createHost, createSlot, getSlot } from 'create-slots/rfc'
+import { createHost, createSlot, getSlot } from 'create-slots/list'
 
 type ItemProps = Omit<React.ComponentPropsWithoutRef<'li'>, 'value'> & {
   value: string

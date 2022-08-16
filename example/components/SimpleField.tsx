@@ -1,5 +1,5 @@
 import React, { useId, useState } from 'react'
-import { createHost, createSlot } from 'create-slots/simple'
+import { createHost, createSlot } from 'create-slots'
 
 const Description = (props: React.ComponentPropsWithoutRef<'div'>) => (
   <div

@@ -40,12 +40,16 @@ export const isSlot = <T extends React.ElementType>(
   return slotElement.type === slot
 }
 
-export const getSlotProps = <T extends SlotElement>(slotElement?: T) => {
-  if (!slotElement) return undefined
+export const getSlotProps = <
+  T extends SlotElement | undefined,
+  Props = T extends undefined
+    ? undefined
+    : React.ComponentPropsWithRef<T extends SlotElement<infer P> ? P : never>
+>(
+  slotElement: T
+): Props => {
+  if (!slotElement) return undefined as any
 
-  type Props = React.ComponentPropsWithRef<
-    T extends SlotElement<infer P> ? P : never
-  >
   const { key, ref, props } = slotElement
-  return { ...props, key, ref } as Props
+  return { ...props, key, ref }
 }

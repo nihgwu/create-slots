@@ -14,6 +14,7 @@ import { ScanContext, ScanProvider } from '../ScanContext'
 import { createSlotsManager } from './SlotsManager'
 export type { GetPropsArgs } from './SlotsManager'
 
+/** @deprecated */
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
@@ -89,3 +90,5 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 }
 
 export default createSlots
+
+export * from '../rfc'

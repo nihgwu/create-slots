@@ -10,28 +10,25 @@ const SelectItem = createSlot('li')
 const SelectDivider = createSlot(Divider)
 
 export const Select = (props: React.ComponentPropsWithoutRef<'ul'>) => {
-  const [selected, setSelected] = React.useState<React.ReactElement>()
+  const [selected, setSelected] = React.useState<string>()
   const indexRef = React.useRef(0)
 
   return (
     <div>
-      <div>Selected: {selected?.props.value ?? ''}</div>
+      <div>Selected: {selected ?? ''}</div>
       {createHost(props.children, (slots) => {
         indexRef.current = 0
         return (
           <ul {...props}>
             {slots.map((slot) => {
               if (isSlot(slot, SelectItem)) {
+                const slotProps = getSlotProps(slot)
                 return (
                   <li
-                    {...getSlotProps(slot)}
-                    {...{
-                      'data-index': indexRef.current++,
-                      'aria-selected': slot === selected,
-                      onClick: () => {
-                        setSelected(slot)
-                      },
-                    }}
+                    {...slotProps}
+                    data-index={indexRef.current++}
+                    aria-selected={slotProps.value === selected}
+                    onClick={() => setSelected(slotProps.value as string)}
                   />
                 )
               }
