@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { render } from '@testing-library/react'
 
-import { create } from '../__fixtures__/utils'
+import { create, render } from '../__fixtures__/utils'
 import { StaticField } from '../__fixtures__/StaticField'
 
 test('render slots', () => {

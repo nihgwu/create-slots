@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useReducer } from 'react'
 
 type DevChildrenProps = {
   name: string
@@ -7,16 +7,18 @@ type DevChildrenProps = {
 
 export const DevChildren = ({ name, children }: DevChildrenProps) => {
   const ref = useRef<HTMLSpanElement>(null)
-  const [warned, setWarned] = useState(false)
+  const warnedRef = useRef(false)
+  const forceUpdate = useReducer(() => [], [])[1]
 
   useEffect(() => {
-    if (!warned && ref.current?.innerHTML) {
+    if (!warnedRef.current && ref.current?.innerHTML) {
       console.warn(
         `Unwrapped children found in "${name}", either wrap them in slots or remove`
       )
     }
-    setWarned(true)
-  }, [name, warned])
+    warnedRef.current = true
+    forceUpdate()
+  }, [name])
 
-  return warned ? (children as JSX.Element) : <span ref={ref}>{children}</span>
+  return warnedRef.current ? <>{children}</> : <span ref={ref}>{children}</span>
 }
