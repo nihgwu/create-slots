@@ -1,6 +1,5 @@
 import React, {
   forwardRef,
-  memo,
   useContext,
   useEffect,
   useReducer,
@@ -28,26 +27,24 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = memo(
-      forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
-        const Scan = useContext(ScanContext)
-        const Slots = useSlots()
+    const Slot = forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
+      const Scan = useContext(ScanContext)
+      const Slots = useSlots()
 
-        const mergedProps = ref ? { ...props, ref } : props
-        Slots.register(key, name, mergedProps)
-        useEffect(() => {
-          Slots.has(key) && Slots.update(key, name, mergedProps)
-        })
-        useEffect(() => {
-          Slots.clear()
-          Scan.rescan()
-          return () => Slots.unmount(key)
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [Slots])
-
-        return null
+      const mergedProps = ref ? { ...props, ref } : props
+      Slots.register(key, name, mergedProps)
+      useEffect(() => {
+        Slots.has(key) && Slots.update(key, name, mergedProps)
       })
-    ) as unknown as T[K]
+      useEffect(() => {
+        Slots.clear()
+        Scan.rescan()
+        return () => Slots.unmount(key)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [Slots])
+
+      return null
+    }) as unknown as T[K]
 
     // provide stable key in StrictMode
     const SlotWithKey = forwardRef((props: any, ref) => {

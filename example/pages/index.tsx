@@ -23,131 +23,142 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           <a href="https://github.com/nihgwu/create-slots">create-slots</a>
         </h1>
+        {process.env.NODE_ENV === 'development' ? (
+          <>
+            <div className={styles.description}>
+              <button onClick={() => setCount(count + 1)}>Count {count}</button>
+            </div>
 
-        <div className={styles.description}>
-          <button onClick={() => setCount(count + 1)}>Count {count}</button>
-        </div>
-
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h2>RFC</h2>
-            <div>
-              <RFCSelect>
-                <RFCSelect.Item value="foo">
-                  <RFCSelect.Item.Title>Foo</RFCSelect.Item.Title>
-                </RFCSelect.Item>
-                <RFCSelect.Divider />
-                {count % 3 !== 2 && (
-                  <>
-                    <RFCSelect.Item value="bar">
-                      <RFCSelect.Item.Title>Bar</RFCSelect.Item.Title>
+            <div className={styles.grid}>
+              <div className={styles.card}>
+                <h2>RFC</h2>
+                <div>
+                  <RFCSelect>
+                    <RFCSelect.Item value="foo">
+                      <RFCSelect.Item.Title>Foo</RFCSelect.Item.Title>
                     </RFCSelect.Item>
                     <RFCSelect.Divider />
-                  </>
-                )}
-                <RFCSelect.Item value="baz">
-                  <RFCSelect.Item.Title>Baz</RFCSelect.Item.Title>
-                  <RFCSelect.Item.Description>
-                    count {count}
-                  </RFCSelect.Item.Description>
-                </RFCSelect.Item>
-              </RFCSelect>
-            </div>
-          </div>
+                    {count % 3 !== 2 && (
+                      <>
+                        <RFCSelect.Item value="bar">
+                          <RFCSelect.Item.Title>Bar</RFCSelect.Item.Title>
+                        </RFCSelect.Item>
+                        <RFCSelect.Divider />
+                      </>
+                    )}
+                    <RFCSelect.Item value="baz">
+                      <RFCSelect.Item.Title>Baz</RFCSelect.Item.Title>
+                      <RFCSelect.Item.Description>
+                        count {count}
+                      </RFCSelect.Item.Description>
+                    </RFCSelect.Item>
+                  </RFCSelect>
+                </div>
+              </div>
 
-          <div className={styles.card}>
-            <h2>List</h2>
-            <div>
-              <Select>
-                <Select.Item value="foo">
-                  <Select.Item.Title>Foo</Select.Item.Title>
-                </Select.Item>
-                <Select.Divider />
-                {count % 3 !== 2 && (
-                  <>
-                    <Select.Item value="bar">
-                      <Select.Item.Title>Bar</Select.Item.Title>
+              <div className={styles.card}>
+                <h2>List</h2>
+                <div>
+                  <Select>
+                    <Select.Item value="foo">
+                      <Select.Item.Title>Foo</Select.Item.Title>
                     </Select.Item>
                     <Select.Divider />
-                  </>
-                )}
-                <Select.Item value="baz">
-                  <Select.Item.Title>Baz</Select.Item.Title>
-                  <Select.Item.Description>
-                    count {count}
-                  </Select.Item.Description>
-                </Select.Item>
-              </Select>
-            </div>
-          </div>
+                    {count % 3 !== 2 && (
+                      <>
+                        <Select.Item value="bar">
+                          <Select.Item.Title>Bar</Select.Item.Title>
+                        </Select.Item>
+                        <Select.Divider />
+                      </>
+                    )}
+                    <Select.Item value="baz">
+                      <Select.Item.Title>Baz</Select.Item.Title>
+                      <Select.Item.Description>
+                        count {count}
+                      </Select.Item.Description>
+                    </Select.Item>
+                  </Select>
+                </div>
+              </div>
 
-          <div className={styles.card}>
-            <h2>Simple</h2>
-            <div>
-              <SimpleField>
-                <SimpleField.Input />
-                <SimpleField.Label>Label</SimpleField.Label>
-                {count % 3 !== 0 && (
-                  <SimpleField.Description>
-                    Description {count}
-                    <SimpleField>
-                      <SimpleField.Input />
-                      <SimpleField.Label>Label</SimpleField.Label>
+              <div className={styles.card}>
+                <h2>Simple</h2>
+                <div>
+                  <SimpleField>
+                    <SimpleField.Input />
+                    <SimpleField.Label>Label</SimpleField.Label>
+                    {count % 3 !== 0 && (
                       <SimpleField.Description>
-                        Nested SimpleField {count}
+                        Description {count}
+                        <SimpleField>
+                          <SimpleField.Input />
+                          <SimpleField.Label>Label</SimpleField.Label>
+                          <SimpleField.Description>
+                            Nested SimpleField {count}
+                          </SimpleField.Description>
+                        </SimpleField>
                       </SimpleField.Description>
-                    </SimpleField>
-                  </SimpleField.Description>
-                )}
-              </SimpleField>
-            </div>
-          </div>
+                    )}
+                  </SimpleField>
+                </div>
+              </div>
 
-          <div className={styles.card}>
-            <h2>Dynamic</h2>
-            <div>
-              <Field>
-                <div />
-                <Field.Input />
-                <Field.Label>Label</Field.Label>
-                {count % 3 !== 0 && (
-                  <Field.Description>
-                    Description {count}
-                    <Field>
-                      <Field.Input />
-                      <Field.Label>Label</Field.Label>
+              <div className={styles.card}>
+                <h2>Dynamic</h2>
+                <div>
+                  <Field>
+                    <div />
+                    <Field.Input />
+                    <Field.Label>Label</Field.Label>
+                    {count % 3 !== 0 && (
                       <Field.Description>
-                        Nested Field {count}
+                        Description {count}
+                        <Field>
+                          <Field.Input />
+                          <Field.Label>Label</Field.Label>
+                          <Field.Description>
+                            Nested Field {count}
+                          </Field.Description>
+                        </Field>
                       </Field.Description>
-                    </Field>
-                  </Field.Description>
-                )}
-              </Field>
-            </div>
-          </div>
+                    )}
+                  </Field>
+                </div>
+              </div>
 
-          <div className={styles.card}>
-            <h2>Static</h2>
-            <div>
-              <StaticField>
-                <StaticField.Input />
-                <StaticField.Label>Label</StaticField.Label>
-                {count % 3 !== 1 && (
-                  <StaticField.Description>
-                    Description {count}
-                    <StaticField>
-                      <StaticField.Input />
-                      <StaticField.Label>Label</StaticField.Label>
+              <div className={styles.card}>
+                <h2>Static</h2>
+                <div>
+                  <StaticField>
+                    <StaticField.Input />
+                    <StaticField.Label>Label</StaticField.Label>
+                    {count % 3 !== 1 && (
                       <StaticField.Description>
-                        Nested Field {count}
+                        Description {count}
+                        <StaticField>
+                          <StaticField.Input />
+                          <StaticField.Label>Label</StaticField.Label>
+                          <StaticField.Description>
+                            Nested Field {count}
+                          </StaticField.Description>
+                        </StaticField>
                       </StaticField.Description>
-                    </StaticField>
-                  </StaticField.Description>
-                )}
-              </StaticField>
+                    )}
+                  </StaticField>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <p className={`${styles.title} ${styles.description}`}>
+            Fully implemented the{' '}
+            <a href="https://github.com/reactjs/rfcs/pull/223">
+              React Slots RFC
+            </a>
+            , with utils
+          </p>
+        )}
       </main>
     </div>
   )

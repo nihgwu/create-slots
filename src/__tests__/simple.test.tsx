@@ -197,6 +197,10 @@ test('render slots', () => {
   `)
 })
 
+test('static hoisting', () => {
+  expect(Field.Description.foo).toBe('Foo')
+})
+
 test('ref', () => {
   const ref = { current: null }
   render(
