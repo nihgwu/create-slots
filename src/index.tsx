@@ -12,6 +12,7 @@ import { createSlotsContext, getComponentName, hoistStatics } from './utils'
 import { createSlotsManager } from './SlotsManager'
 import { DevChildren } from './DevChildren'
 
+/** @deprecated */
 const createSlots = <T extends Record<string, React.ElementType>>(
   components: T
 ) => {
@@ -68,3 +69,5 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 }
 
 export default createSlots
+
+export * from './simple'
