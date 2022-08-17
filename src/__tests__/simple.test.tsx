@@ -251,7 +251,9 @@ test('without host', () => {
 
   instance.update(<Field.Description>Description</Field.Description>)
   expect(instance).toMatchInlineSnapshot(`
-    <span>
+    <span
+      data-testid="description"
+    >
       Description
     </span>
   `)

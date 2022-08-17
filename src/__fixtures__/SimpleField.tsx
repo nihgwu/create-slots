@@ -6,6 +6,10 @@ const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />
 )
 
+Description.defaultProps = {
+  'data-testid': 'description',
+}
+
 const FieldLabel = createSlot<'label'>()
 const FieldInput = createSlot('input')
 const FieldDescription = createSlot(Object.assign(Description, { foo: 'Foo' }))
