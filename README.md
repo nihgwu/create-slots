@@ -38,7 +38,7 @@ export const Field = (props: FieldProps) => {
       <div {...props}>
         {labelProps && <label {...labelProps} htmlFor={inputId} />}
         <input id={id} {...inputProps} />
-        {Slots.get('Description')}
+        {Slots.get(FieldDescription)}
       </div>
     )
   })
@@ -68,9 +68,9 @@ import { createHost, createSlot, getSlotProps, isSlot } from 'create-slots/list'
 const SelectItem = createSlot('li')
 const SelectDivider = createSlot('hr')
 
-type SelectProps = React.FC<React.ComponentPropsWithoutRef<'ul'>>
+type SelectProps = React.ComponentPropsWithoutRef<'ul'>
 
-const Select = (props: SelectProps) => {
+export const Select = (props: SelectProps) => {
   const [selected, setSelected] = useState<string>()
   const indexRef = React.useRef(0)
 
@@ -116,6 +116,8 @@ Select.Divider = SelectDivider
   <Select.Item value="bar">Bar</Select.Item>
 </Select>
 ```
+
+[![Edit quirky-meninsky-7w87pe](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/quirky-meninsky-7w87pe?fontsize=14&hidenavigation=1&theme=dark)
 
 ## License
 
