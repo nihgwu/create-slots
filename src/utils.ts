@@ -12,7 +12,7 @@ export const getComponentName = (Component: React.ElementType) => {
   return Component.displayName || Component.name || 'Component'
 }
 
-const REACT_STATICS = ['$$typeof', 'render', 'displayName']
+const REACT_STATICS = ['$$typeof', 'render', 'displayName', 'defaultProps']
 
 export const hoistStatics = <T extends React.ElementType>(
   target: T,
