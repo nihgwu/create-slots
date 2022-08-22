@@ -1,4 +1,4 @@
-import React, { forwardRef, useContext, useMemo } from 'react'
+import * as React from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
 import { DevChildren } from '../DevChildren'
@@ -9,11 +9,11 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 ) => {
   type K = keyof T
   const SlotsContext = createSlotsContext(createSlotsManager(components))
-  const useSlots = () => useContext(SlotsContext)
+  const useSlots = () => React.useContext(SlotsContext)
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = forwardRef((props, ref) => {
-      const Slots = useContext(SlotsContext)
+    const Slot = React.forwardRef((props, ref) => {
+      const Slots = React.useContext(SlotsContext)
 
       Slots.register(name, { ...props, ref })
 
@@ -26,8 +26,8 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const createHost = <P extends React.ComponentType>(Component: P) => {
     const displayName = `Host(${getComponentName(Component)})`
-    const Host = forwardRef(({ children, ...props }: any, ref) => {
-      const Slots = useMemo(() => createSlotsManager(components), [])
+    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
+      const Slots = React.useMemo(() => createSlotsManager(components), [])
       Slots.clear()
       return (
         <SlotsContext.Provider value={Slots}>

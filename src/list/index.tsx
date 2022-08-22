@@ -1,11 +1,4 @@
-import React, {
-  forwardRef,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-  useMemo,
-} from 'react'
+import * as React from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
 import { DevChildren } from '../DevChildren'
@@ -19,7 +12,7 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 ) => {
   type K = keyof T
   const SlotsContext = createSlotsContext(createSlotsManager(components))
-  const useSlots = () => useContext(SlotsContext)
+  const useSlots = () => React.useContext(SlotsContext)
 
   let _id = 0
   const getId = () => {
@@ -27,16 +20,16 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   }
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
-      const Scan = useContext(ScanContext)
+    const Slot = React.forwardRef(({ $slot_key$: key, ...props }: any, ref) => {
+      const Scan = React.useContext(ScanContext)
       const Slots = useSlots()
 
       const mergedProps = ref ? { ...props, ref } : props
       Slots.register(key, name, mergedProps)
-      useEffect(() => {
+      React.useEffect(() => {
         Slots.has(key) && Slots.update(key, name, mergedProps)
       })
-      useEffect(() => {
+      React.useEffect(() => {
         Slots.clear()
         Scan.rescan()
         return () => Slots.unmount(key)
@@ -47,8 +40,8 @@ const createSlots = <T extends Record<string, React.ElementType>>(
     }) as unknown as T[K]
 
     // provide stable key in StrictMode
-    const SlotWithKey = forwardRef((props: any, ref) => {
-      const [key] = useState(getId)
+    const SlotWithKey = React.forwardRef((props: any, ref) => {
+      const [key] = React.useState(getId)
       return <Slot ref={ref} $slot_key$={key} {...props} />
     }) as unknown as T[K]
 
@@ -58,9 +51,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const createHost = <P extends React.ComponentType<any>>(Component: P) => {
     const displayName = `Host(${getComponentName(Component)})`
-    const Host = forwardRef(({ children, ...props }: any, ref) => {
-      const forceUpdate = useReducer(() => [], [])[1]
-      const Slots = useMemo(
+    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
+      const forceUpdate = React.useReducer(() => [], [])[1]
+      const Slots = React.useMemo(
         () => createSlotsManager(components, forceUpdate),
         [forceUpdate]
       )

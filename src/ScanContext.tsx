@@ -1,12 +1,12 @@
-import React, { createContext, useReducer, useMemo } from 'react'
+import * as React from 'react'
 
 // istanbul ignore next
-export const ScanContext = createContext({ rescan: () => {} })
+export const ScanContext = React.createContext({ rescan: () => {} })
 
 export const ScanProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, rescan] = useReducer(() => [], [])
+  const [state, rescan] = React.useReducer(() => [], [])
 
-  const value = useMemo(
+  const value = React.useMemo(
     () => ({ rescan }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [state]

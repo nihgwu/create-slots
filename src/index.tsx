@@ -1,11 +1,4 @@
-import React, {
-  forwardRef,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-  useMemo,
-} from 'react'
+import * as React from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from './utils'
 import { createSlotsManager } from './SlotsManager'
@@ -20,16 +13,16 @@ const createSlots = <T extends Record<string, React.ElementType>>(
   const SlotsContext = createSlotsContext(
     createSlotsManager(components, () => {})
   )
-  const useSlots = () => useContext(SlotsContext)
+  const useSlots = () => React.useContext(SlotsContext)
 
   const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = forwardRef((props, ref) => {
+    const Slot = React.forwardRef((props, ref) => {
       const Slots = useSlots()
 
       const mergedProps = ref ? { ...props, ref } : props
-      useState(() => Slots.register(name, mergedProps))
-      useEffect(() => Slots.update(name, mergedProps))
-      useEffect(() => () => Slots.unmount(name), [Slots])
+      React.useState(() => Slots.register(name, mergedProps))
+      React.useEffect(() => Slots.update(name, mergedProps))
+      React.useEffect(() => () => Slots.unmount(name), [Slots])
 
       return null
     }) as unknown as T[K]
@@ -40,9 +33,9 @@ const createSlots = <T extends Record<string, React.ElementType>>(
 
   const createHost = <P extends React.ComponentType<any>>(Component: P) => {
     const displayName = `Host(${getComponentName(Component)})`
-    const Host = forwardRef(({ children, ...props }: any, ref) => {
-      const forceUpdate = useReducer(() => [], [])[1]
-      const Slots = useMemo(
+    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
+      const forceUpdate = React.useReducer(() => [], [])[1]
+      const Slots = React.useMemo(
         () => createSlotsManager(components, forceUpdate),
         [forceUpdate]
       )

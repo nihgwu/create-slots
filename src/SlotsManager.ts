@@ -1,4 +1,4 @@
-import { createElement } from 'react'
+import * as React from 'react'
 
 export const createSlotsManager = <T extends Record<string, React.ElementType>>(
   components: T,
@@ -29,7 +29,7 @@ export const createSlotsManager = <T extends Record<string, React.ElementType>>(
       const props = propsMap.get(name)
       if (!props) return null
 
-      return createElement(
+      return React.createElement(
         components[name],
         finalProps || (defaultProps ? { ...defaultProps, ...props } : props)
       )

@@ -1,7 +1,7 @@
-import React, { createContext } from 'react'
+import * as React from 'react'
 
 export const createSlotsContext = <T>(defaultValue: T) => {
-  const context = createContext(defaultValue)
+  const context = React.createContext(defaultValue)
   context.displayName = 'SlotsContext'
   return context
 }
