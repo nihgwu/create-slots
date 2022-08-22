@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useReducer } from 'react'
 
+const Wrapper = 'slots-wrapper' as 'span'
+const wrapperRegexp = new RegExp(`^<${Wrapper}>.*</${Wrapper}>$`)
+
 type DevChildrenProps = {
   name: string
   children: React.ReactNode
@@ -12,13 +15,20 @@ export const DevChildren = ({ name, children }: DevChildrenProps) => {
 
   useEffect(() => {
     if (!warnedRef.current && ref.current?.innerHTML) {
-      console.warn(
-        `Unwrapped children found in "${name}", either wrap them in slots or remove`
-      )
+      const content = ref.current.innerHTML
+      if (content && !wrapperRegexp.test(content)) {
+        console.warn(
+          `Unwrapped children found in "${name}", either wrap them in slots or remove`
+        )
+      }
     }
     warnedRef.current = true
     forceUpdate()
   }, [name])
 
-  return warnedRef.current ? <>{children}</> : <span ref={ref}>{children}</span>
+  return warnedRef.current ? (
+    <>{children}</>
+  ) : (
+    <Wrapper ref={ref}>{children}</Wrapper>
+  )
 }
