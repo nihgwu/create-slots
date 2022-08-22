@@ -8,6 +8,7 @@ import { StaticField } from '../components/StaticField'
 import { Select } from '../components/Select'
 import { Field as SimpleField } from '../components/SimpleField'
 import { Select as RFCSelect } from '../components/RFCSelect'
+import { Tree } from '../components/Tree'
 
 const Home: NextPage = () => {
   const [count, setCount] = React.useState(0)
@@ -79,6 +80,29 @@ const Home: NextPage = () => {
                       </Select.Item.Description>
                     </Select.Item>
                   </Select>
+                </div>
+              </div>
+
+              <div className={styles.card}>
+                <h2>Tree</h2>
+                <div>
+                  <Tree>
+                    <Tree.Item value="0" />
+                    <Tree.Menu>
+                      {count % 3 !== 1 && <Tree.Item value="1-0" />}
+                      <Tree.Item value="1-1" />
+                      <Tree.Menu>
+                        <Tree.Item value="1-2-0" />
+                        <Tree.Item value="1-2-1" />
+                      </Tree.Menu>
+                    </Tree.Menu>
+                    {count % 3 !== 2 && (
+                      <Tree.Menu>
+                        <Tree.Item value="2-0" />
+                        <Tree.Item value="2-1" />
+                      </Tree.Menu>
+                    )}
+                  </Tree>
                 </div>
               </div>
 

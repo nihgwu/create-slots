@@ -18,32 +18,49 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "development": {
+        "types": "./dev/index.d.ts",
         "import": "./dev/index.mjs",
         "require": "./dev/index.js"
       },
       "default": {
+        "types": "./dist/index.d.ts",
         "import": "./dist/index.mjs",
         "require": "./dist/index.js"
       }
     },
     "./list": {
       "development": {
+        "types": "./dev/list/index.d.ts",
         "import": "./dev/list/index.mjs",
         "require": "./dev/list/index.js"
       },
       "default": {
+        "types": "./dist/list/index.d.ts",
         "import": "./dist/list/index.mjs",
         "require": "./dist/list/index.js"
       }
     },
+    "./dev": {
+      "types": "./dev/index.d.ts",
+      "import": "./dev/index.mjs",
+      "require": "./dev/index.js"
+    },
+    "./dev/list": {
+      "types": "./dist/list/index.d.ts",
+      "import": "./dev/list/index.mjs",
+      "require": "./dev/list/index.js"
+    },
     "./static": {
       "development": {
+        "types": "./dev/static/index.d.ts",
         "import": "./dev/static/index.mjs",
         "require": "./dev/static/index.js"
       },
       "default": {
+        "types": "./dist/static/index.d.ts",
         "import": "./dist/static/index.mjs",
         "require": "./dist/static/index.js"
       }
