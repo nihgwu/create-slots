@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useReducer } from 'react'
+import * as React from 'react'
 
 const Wrapper = 'slots-wrapper' as 'span'
 const wrapperRegexp = new RegExp(`^<${Wrapper}>.*</${Wrapper}>$`)
@@ -9,11 +9,11 @@ type DevChildrenProps = {
 }
 
 export const DevChildren = ({ name, children }: DevChildrenProps) => {
-  const ref = useRef<HTMLSpanElement>(null)
-  const warnedRef = useRef(false)
-  const forceUpdate = useReducer(() => [], [])[1]
+  const ref = React.useRef<HTMLSpanElement>(null)
+  const warnedRef = React.useRef(false)
+  const forceUpdate = React.useReducer(() => [], [])[1]
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!warnedRef.current && ref.current?.innerHTML) {
       const content = ref.current.innerHTML
       if (content && !wrapperRegexp.test(content)) {

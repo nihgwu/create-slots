@@ -1,5 +1,5 @@
 import * as React from 'react'
-import TestRenderer, { act } from 'react-test-renderer'
+import * as TestRenderer from 'react-test-renderer'
 import * as RTL from '@testing-library/react'
 
 export const create: typeof TestRenderer.create = (element) => {
@@ -11,7 +11,7 @@ export const create: typeof TestRenderer.create = (element) => {
     )
     const update = renderer.update
     renderer.update = (element) => {
-      act(() => {
+      TestRenderer.act(() => {
         update(<React.StrictMode>{element}</React.StrictMode>)
       })
     }
