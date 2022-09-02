@@ -46,10 +46,10 @@ export const HostSlots = ({
     <>
       <SlotsContext.Provider value={Slots}>
         <ScanProvider>
-          {process.env.NODE_ENV === 'development' ? (
-            <DevChildren name="HostSlots">{children}</DevChildren>
-          ) : (
+          {process.env.NODE_ENV === 'production' ? (
             children
+          ) : (
+            <DevChildren name="HostSlots">{children}</DevChildren>
           )}
         </ScanProvider>
       </SlotsContext.Provider>

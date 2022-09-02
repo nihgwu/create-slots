@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { useIsomorphicEffect } from './utils'
+
 const Wrapper = 'slots-wrapper' as 'span'
 const wrapperRegexp = new RegExp(`^<${Wrapper}>.*</${Wrapper}>$`)
 
@@ -13,7 +15,7 @@ export const DevChildren = ({ name, children }: DevChildrenProps) => {
   const warnedRef = React.useRef(false)
   const forceUpdate = React.useReducer(() => [], [])[1]
 
-  React.useEffect(() => {
+  useIsomorphicEffect(() => {
     if (!warnedRef.current && ref.current?.innerHTML) {
       const content = ref.current.innerHTML
       if (content && !wrapperRegexp.test(content)) {

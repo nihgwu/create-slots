@@ -1,15 +1,11 @@
 {
-  "main": "../dist/list/index.js",
-  "module": "../dist/list/index.mjs",
+  "type": "module",
+  "main": "../dist/list/index.cjs",
+  "module": "../dist/list/index.js",
   "types": "../dist/list/index.d.ts",
   "exports": {
-    "development": {
-      "import": "./../dev/list/index.mjs",
-      "require": "./../dev/list/index.js"
-    },
-    "default": {
-      "import": "./../dist/list/index.mjs",
-      "require": "./../dist/list/index.js"
-    }
+    "import": "./../dist/list/index.js",
+    "require": "./../dist/list/index.cjs",
+    "types": "./../dist/list/index.d.ts"
   }
 }

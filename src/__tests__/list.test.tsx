@@ -272,10 +272,14 @@ test('dev warning', () => {
       Divider
     </Select>
   )
-  expect(warn).toHaveBeenCalledTimes(0)
+  expect(warn).toHaveBeenCalledTimes(1)
+  expect(warn).toHaveBeenCalledWith(
+    'Unwrapped children found in "HostSlots", either wrap them in slots or remove'
+  )
 
-  // @ts-ignore
-  process.env.NODE_ENV = 'development'
+  const NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = 'production'
+
   render(
     <Select>
       <Select.Item value="foo">Foo</Select.Item>
@@ -283,7 +287,6 @@ test('dev warning', () => {
     </Select>
   )
   expect(warn).toHaveBeenCalledTimes(1)
-  expect(warn).toHaveBeenCalledWith(
-    'Unwrapped children found in "HostSlots", either wrap them in slots or remove'
-  )
+
+  process.env.NODE_ENV = NODE_ENV
 })

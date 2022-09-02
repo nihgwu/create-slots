@@ -29,10 +29,10 @@ export const HostSlots = ({
   return (
     <>
       <SlotsContext.Provider value={Slots}>
-        {process.env.NODE_ENV === 'development' ? (
-          <DevChildren name="HostSlots">{children}</DevChildren>
-        ) : (
+        {process.env.NODE_ENV === 'production' ? (
           children
+        ) : (
+          <DevChildren name="HostSlots">{children}</DevChildren>
         )}
       </SlotsContext.Provider>
       <Template>{() => callback(Slots)}</Template>
