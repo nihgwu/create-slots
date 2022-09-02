@@ -6,10 +6,7 @@ import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 import { Field } from '../__fixtures__/Field'
-import { StaticField } from '../__fixtures__/StaticField'
 import { Select } from '../__fixtures__/Select'
-import { Select as RFCSelect } from '../__fixtures__/RFCSelect'
-import { Field as SimpleField } from '../__fixtures__/SimpleField'
 
 test('default SSR', () => {
   const markup = renderToStaticMarkup(
@@ -46,41 +43,6 @@ test('default SSR', () => {
   expect(markup1).toEqual(markup)
 })
 
-test('static SSR', () => {
-  const markup = renderToStaticMarkup(
-    <StaticField>
-      <StaticField.Label>Label</StaticField.Label>
-      <StaticField.Input id="input-id" />
-      <StaticField.Description>
-        <StaticField>
-          <StaticField.Label>Label</StaticField.Label>
-          <StaticField.Input />
-        </StaticField>
-      </StaticField.Description>
-    </StaticField>
-  )
-
-  expect(markup).toMatchInlineSnapshot(
-    `"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`
-  )
-
-  // arbitrary order
-  const markup1 = renderToStaticMarkup(
-    <StaticField>
-      <StaticField.Description>
-        <StaticField>
-          <StaticField.Label>Label</StaticField.Label>
-          <StaticField.Input />
-        </StaticField>
-      </StaticField.Description>
-      <StaticField.Label>Label</StaticField.Label>
-      <StaticField.Input id="input-id" />
-    </StaticField>
-  )
-
-  expect(markup1).toEqual(markup)
-})
-
 test('list SSR', () => {
   const markup = renderToStaticMarkup(
     <Select>
@@ -92,52 +54,4 @@ test('list SSR', () => {
   expect(markup).toMatchInlineSnapshot(
     `"<div><div>Selected: </div><ul><li value=\\"foo\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
   )
-})
-
-test('rfc SSR', () => {
-  const markup = renderToStaticMarkup(
-    <RFCSelect>
-      <RFCSelect.Item value="foo">Foo</RFCSelect.Item>
-      <RFCSelect.Divider />
-      <RFCSelect.Item value="bar">Bar</RFCSelect.Item>
-    </RFCSelect>
-  )
-  expect(markup).toMatchInlineSnapshot(
-    `"<div><div>Selected: </div><ul><li value=\\"foo\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
-  )
-})
-
-test('simple SSR', () => {
-  const markup = renderToStaticMarkup(
-    <SimpleField>
-      <SimpleField.Label>Label</SimpleField.Label>
-      <SimpleField.Input id="input-id" />
-      <SimpleField.Description>
-        <SimpleField>
-          <SimpleField.Label>Label</SimpleField.Label>
-          <SimpleField.Input />
-        </SimpleField>
-      </SimpleField.Description>
-    </SimpleField>
-  )
-
-  expect(markup).toMatchInlineSnapshot(
-    `"<div><label for=\\"input-id\\">Label</label><input id=\\"input-id\\" aria-describedby=\\":r1:\\"/><div><span id=\\":r1:\\"><div><label for=\\":r0:\\">Label</label><input id=\\":r0:\\"/></div></span></div></div>"`
-  )
-
-  // arbitrary order
-  const markup1 = renderToStaticMarkup(
-    <SimpleField>
-      <SimpleField.Description>
-        <SimpleField>
-          <SimpleField.Label>Label</SimpleField.Label>
-          <SimpleField.Input />
-        </SimpleField>
-      </SimpleField.Description>
-      <SimpleField.Label>Label</SimpleField.Label>
-      <SimpleField.Input id="input-id" />
-    </SimpleField>
-  )
-
-  expect(markup1).toEqual(markup)
 })

@@ -1,64 +1,81 @@
 import * as React from 'react'
 
-import createSlots from '..'
+import { createHost, createSlot } from '../'
 
 const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />
 )
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Label: 'label',
-  Input: 'input',
-  Description: Object.assign(Description, { foo: 'Foo' }),
-  Icon: 'span',
-})
+Description.defaultProps = {
+  'data-testid': 'description',
+}
 
-const createFill = <P extends keyof typeof SlotComponents>(name: P) => {
-  const FillComponent = React.forwardRef((props, ref) => {
-    const Slots = useSlots()
-    const [originalProps] = React.useState(() => Slots.getProps(name))
+const FieldLabel = createSlot<'label'>()
+const FieldInput = createSlot('input')
+const FieldDescription = createSlot(Object.assign(Description, { foo: 'Foo' }))
+const FieldIcon = createSlot('span')
 
-    React.useEffect(() => Slots.update(name, { ...props, ref }))
+type Slots = Parameters<Parameters<typeof createHost>[1]>[0]
+const FillContext = React.createContext<Slots | undefined>(undefined)
+
+const createFill = <T extends React.ElementType>(Slot: T) => {
+  const FillComponent = React.forwardRef((props: any, ref) => {
+    const Slots = React.useContext(FillContext)!
+    const [original] = React.useState(() => Slots.get(Slot))
+
+    React.useEffect(() => Slots.update(Slot, <Slot ref={ref} {...props} />))
     React.useEffect(
       () => () => {
-        originalProps ? Slots.update(name, originalProps) : Slots.unmount(name)
+        original ? Slots.update(Slot, original) : Slots.unmount(Slot)
       },
-      [Slots, originalProps]
+      [Slots, original]
     )
 
     return null
-  }) as unknown as typeof SlotComponents[P]
+  }) as unknown as T
   return FillComponent
 }
 
 type FieldProps = React.ComponentPropsWithoutRef<'div'>
 
-const FieldBase: React.FC<FieldProps> = (props) => {
-  const Slots = useSlots()
+export const Field = (props: FieldProps) => {
   const id = ':r0:'
   const descriptionId = ':r1:'
-  const inputProps = Slots.getProps('Input')
 
-  return (
-    <div {...props}>
-      {Slots.render('Label', { htmlFor: inputProps?.id || id })}
-      {Slots.render('Input', undefined, {
-        id,
-        'aria-describedby': Slots.has('Description')
-          ? descriptionId
-          : undefined,
-        ...Slots.getProps('Input'),
-      })}
-      {(Slots.has('Icon') || Slots.has('Description')) && (
-        <div>
-          {Slots.render('Icon')}
-          {Slots.render('Description', { id: descriptionId })}
+  return createHost(props.children, (Slots) => {
+    const labelProps = Slots.getProps(FieldLabel)
+    const inputProps = Slots.getProps(FieldInput)
+    const descriptionProps = Slots.getProps(FieldDescription)
+    const iconProps = Slots.getProps(FieldIcon)
+    return (
+      <FillContext.Provider value={Slots}>
+        <div {...props}>
+          {labelProps && (
+            <label {...labelProps} htmlFor={inputProps?.id || id} />
+          )}
+          {inputProps && (
+            <input
+              id={id}
+              aria-describedby={descriptionProps ? descriptionId : undefined}
+              {...inputProps}
+            />
+          )}
+          {(iconProps || descriptionProps) && (
+            <div>
+              {Slots.get(FieldIcon)}
+              {descriptionProps && (
+                <span {...descriptionProps} id={descriptionId} />
+              )}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  )
+      </FillContext.Provider>
+    )
+  })
 }
 
-export const Field = Object.assign(createHost(FieldBase), SlotComponents, {
-  LabelFill: createFill('Label'),
-} as const)
+Field.Label = FieldLabel
+Field.Input = FieldInput
+Field.Description = FieldDescription
+Field.Icon = FieldIcon
+Field.LabelFill = createFill(FieldLabel)

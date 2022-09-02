@@ -133,7 +133,6 @@ test('render slots', () => {
       </div>
     </div>
   `)
-
   // filling slots
   instance.update(
     <Field>
@@ -214,12 +213,12 @@ test('ref', () => {
   )
 
   expect(ref.current).toMatchInlineSnapshot(`
-<label
-  for=":r0:"
->
-  Label
-</label>
-`)
+    <label
+      for=":r0:"
+    >
+      Label
+    </label>
+  `)
 })
 
 test('dev warning', () => {
@@ -242,6 +241,20 @@ test('dev warning', () => {
   )
   expect(warn).toHaveBeenCalledTimes(1)
   expect(warn).toHaveBeenCalledWith(
-    'Unwrapped children found in "Host(FieldBase)", either wrap them in slots or remove'
+    'Unwrapped children found in "HostSlots", either wrap them in slots or remove'
   )
+})
+
+test('without host', () => {
+  const instance = create(<Field.Label>Label</Field.Label>)
+  expect(instance).toMatchInlineSnapshot(`null`)
+
+  instance.update(<Field.Description>Description</Field.Description>)
+  expect(instance).toMatchInlineSnapshot(`
+    <span
+      data-testid="description"
+    >
+      Description
+    </span>
+  `)
 })

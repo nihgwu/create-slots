@@ -1,63 +1,67 @@
 import * as React from 'react'
 
 import { createSlotsContext, getComponentName, hoistStatics } from './utils'
-import { createSlotsManager } from './SlotsManager'
 import { DevChildren } from './DevChildren'
+import { createSlotsManager } from './SlotsManager'
 
-/** @deprecated */
-const createSlots = <T extends Record<string, React.ElementType>>(
-  components: T
-) => {
-  type K = keyof T
-  // istanbul ignore next
-  const SlotsContext = createSlotsContext(
-    createSlotsManager(components, () => {})
-  )
-  const useSlots = () => React.useContext(SlotsContext)
+type Slots = ReturnType<typeof createSlotsManager>
+type Callback = (Slots: Slots) => JSX.Element | null
 
-  const SlotComponents = Object.keys(components).reduce((acc, name: K) => {
-    const Slot = React.forwardRef((props, ref) => {
-      const Slots = useSlots()
+const SlotsContext = createSlotsContext<Slots | undefined>(undefined)
 
-      const mergedProps = ref ? { ...props, ref } : props
-      React.useState(() => Slots.register(name, mergedProps))
-      React.useEffect(() => Slots.update(name, mergedProps))
-      React.useEffect(() => () => Slots.unmount(name), [Slots])
-
-      return null
-    }) as unknown as T[K]
-
-    acc[name] = hoistStatics(Slot, components[name])
-    return acc
-  }, {} as T)
-
-  const createHost = <P extends React.ComponentType<any>>(Component: P) => {
-    const displayName = `Host(${getComponentName(Component)})`
-    const Host = React.forwardRef(({ children, ...props }: any, ref) => {
-      const forceUpdate = React.useReducer(() => [], [])[1]
-      const Slots = React.useMemo(
-        () => createSlotsManager(components, forceUpdate),
-        [forceUpdate]
-      )
-      return (
-        <SlotsContext.Provider value={Slots}>
-          {process.env.NODE_ENV === 'development' ? (
-            <DevChildren name={displayName}>{children}</DevChildren>
-          ) : (
-            children
-          )}
-          <Component ref={ref} {...props} />
-        </SlotsContext.Provider>
-      )
-    }) as unknown as P
-    Host.displayName = displayName
-
-    return Host
-  }
-
-  return { SlotComponents, createHost, useSlots }
+const Template = ({ children }: { children: () => ReturnType<Callback> }) => {
+  return children()
 }
 
-export default createSlots
+export const HostSlots = ({
+  children,
+  callback,
+}: {
+  children: React.ReactNode
+  callback: Callback
+}) => {
+  const forceUpdate = React.useReducer(() => [], [])[1]
+  const Slots = React.useMemo(
+    () => createSlotsManager(forceUpdate),
+    [forceUpdate]
+  )
 
-export * from './simple'
+  return (
+    <>
+      <SlotsContext.Provider value={Slots}>
+        {process.env.NODE_ENV === 'development' ? (
+          <DevChildren name="HostSlots">{children}</DevChildren>
+        ) : (
+          children
+        )}
+      </SlotsContext.Provider>
+      <Template>{() => callback(Slots)}</Template>
+    </>
+  )
+}
+
+export const createHost = (children: React.ReactNode, callback: Callback) => {
+  return <HostSlots children={children} callback={callback} />
+}
+
+export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
+  const ForwardRef = (props: any, ref: any) => {
+    const Slots = React.useContext(SlotsContext)
+    if (!Slots) return Fallback ? <Fallback ref={ref} {...props} /> : null
+
+    const element = <Slot ref={ref} {...props} />
+    /* eslint-disable react-hooks/rules-of-hooks */
+    React.useState(() => Slots.register(Slot, element))
+    React.useEffect(() => Slots.update(Slot, element))
+    React.useEffect(() => () => Slots.unmount(Slot), [Slots])
+    /* eslint-enable react-hooks/rules-of-hooks */
+
+    return null
+  }
+  ForwardRef.displayName = Fallback
+    ? `Slot(${getComponentName(Fallback)})`
+    : 'Slot'
+  const Slot = React.forwardRef(ForwardRef) as unknown as T
+
+  return Fallback ? hoistStatics(Slot, Fallback) : Slot
+}

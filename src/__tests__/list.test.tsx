@@ -284,6 +284,6 @@ test('dev warning', () => {
   )
   expect(warn).toHaveBeenCalledTimes(1)
   expect(warn).toHaveBeenCalledWith(
-    'Unwrapped children found in "Host(SelectBase)", either wrap them in slots or remove'
+    'Unwrapped children found in "HostSlots", either wrap them in slots or remove'
   )
 })
