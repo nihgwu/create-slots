@@ -14,49 +14,25 @@
     "slots",
     "composition"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
-      "development": {
-        "types": "./dist/index.d.ts",
-        "import": "./dev/index.mjs",
-        "require": "./dev/index.js"
-      },
-      "default": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js"
-      }
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
-    "./dev": {
-      "types": "./dist/index.d.ts",
-      "import": "./dev/index.mjs",
-      "require": "./dev/index.js"
-    },
+    "./package.json": "./package.json",
     "./list": {
-      "development": {
-        "types": "./dist/list/index.d.ts",
-        "import": "./dev/list/index.mjs",
-        "require": "./dev/list/index.js"
-      },
-      "default": {
-        "types": "./dist/list/index.d.ts",
-        "import": "./dist/list/index.mjs",
-        "require": "./dist/list/index.js"
-      }
-    },
-    "./dev/list": {
-      "types": "./dist/list/index.d.ts",
-      "import": "./dev/list/index.mjs",
-      "require": "./dev/list/index.js"
+      "import": "./dist/list/index.js",
+      "require": "./dist/list/index.cjs",
+      "types": "./dist/list/index.d.ts"
     }
   },
   "sideEffects": false,
   "files": [
-    "dev",
     "dist",
     "list"
   ],
@@ -69,19 +45,18 @@
       "esm",
       "cjs"
     ],
-    "platform": "browser",
-    "target": "es2018",
     "splitting": false,
     "sourcemap": true,
-    "clean": true
+    "clean": true,
+    "dts": true
   },
   "scripts": {
     "start": "yarn --cwd example start",
     "test": "jest",
     "test:ci": "jest --coverage",
     "typecheck": "tsc --noEmit",
-    "build": "tsup --minify --dts && tsup --out-dir dev",
-    "watch": "tsup --out-dir dev --watch --dts",
+    "build": "tsup --minify",
+    "watch": "tsup --watch",
     "clean": "rimraf dist",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "prettier": "prettier --write '**/src/**/*.{ts,tsx}'"
