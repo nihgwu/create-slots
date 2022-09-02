@@ -1,27 +1,38 @@
 import React, { useId } from 'react'
-import createSlots from 'create-slots'
+import { createHost, createSlot, getSlot } from 'create-slots/list'
 
 type ItemProps = Omit<React.ComponentPropsWithoutRef<'li'>, 'value'> & {
   value: string
 }
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Title: 'h4',
-  Description: 'div',
-})
+const ItemTitle = createSlot<'h4'>()
+const ItemDescription = createSlot<'div'>()
 
-const ItemBase = (props: ItemProps) => {
-  const Slots = useSlots()
+export const Item = (props: ItemProps) => {
   const id = useId()
-  const titleId = Slots.has('Title') ? `${id}-title` : undefined
-  const descId = Slots.has('Description') ? `${id}-desc` : undefined
 
-  return (
-    <li aria-describedby={descId} aria-label={titleId} {...props}>
-      {Slots.render('Title', { id: titleId })}
-      {Slots.render('Description', { id: descId })}
-    </li>
-  )
+  return createHost(props.children, (slots) => {
+    const titleSlot = getSlot(slots, ItemTitle)
+    const descriptionSlot = getSlot(slots, ItemDescription)
+    const titleId = titleSlot ? `${id}-title` : undefined
+    const descId = descriptionSlot ? `${id}-desc` : undefined
+
+    return (
+      <li aria-describedby={descId} aria-label={titleId} {...props}>
+        {titleSlot && (
+          <h4 id={titleId} ref={titleSlot.ref} {...titleSlot.props} />
+        )}
+        {descriptionSlot && (
+          <div
+            id={descId}
+            ref={descriptionSlot.ref}
+            {...descriptionSlot.props}
+          />
+        )}
+      </li>
+    )
+  })
 }
 
-export const Item = Object.assign(createHost(ItemBase), SlotComponents)
+Item.Title = ItemTitle
+Item.Description = ItemDescription

@@ -1,5 +1,5 @@
-import React, { useId } from 'react'
-import createSlots from 'create-slots'
+import React, { useId, useState } from 'react'
+import { createHost, createSlot } from 'create-slots'
 
 const Description = (props: React.ComponentPropsWithoutRef<'div'>) => (
   <div
@@ -8,33 +8,43 @@ const Description = (props: React.ComponentPropsWithoutRef<'div'>) => (
   />
 )
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Label: 'label',
-  Input: 'input',
-  Description,
-})
+const FieldLabel = createSlot('label')
+const FieldInput = createSlot('input')
+const FieldDescription = createSlot(Description)
 
-type FieldProps = React.ComponentPropsWithoutRef<'div'>
-
-const FieldBase: React.FC<FieldProps> = (props) => {
-  const Slots = useSlots()
+export const Field = (props: React.ComponentPropsWithoutRef<'div'>) => {
   const id = useId()
-  const inputId = Slots.getProps('Input')?.id || `${id}-label`
-  const descriptionId = Slots.has('Description') ? `${id}-desc` : undefined
 
   return (
     <div {...props}>
-      {Slots.render('Label', { htmlFor: inputId })}
-      {Slots.render('Input', {
-        id: inputId,
-        'aria-describedby': descriptionId,
-      })}
-      {Slots.render('Description', {
-        id: descriptionId,
+      {createHost(props.children, (Slots) => {
+        const labelProps = Slots.getProps(FieldLabel)
+        const inputProps = Slots.getProps(FieldInput)
+        const descriptionIdProps = Slots.getProps(FieldDescription)
+
+        const inputId = inputProps?.id || `${id}-label`
+        const descriptionId = descriptionIdProps ? `${id}-desc` : undefined
+
+        return (
+          <>
+            {labelProps && <label {...labelProps} htmlFor={inputId} />}
+            {inputProps && (
+              <input
+                id={inputId}
+                aria-describedby={descriptionId}
+                {...inputProps}
+              />
+            )}
+            {descriptionIdProps && (
+              <Description id={descriptionId} {...descriptionIdProps} />
+            )}
+          </>
+        )
       })}
     </div>
   )
 }
 
-export const Field = Object.assign(createHost(FieldBase), SlotComponents)
-Field.displayName = 'Field'
+Field.Label = FieldLabel
+Field.Input = FieldInput
+Field.Description = FieldDescription

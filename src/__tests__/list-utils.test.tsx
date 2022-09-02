@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { create } from '../__fixtures__/utils'
-import { Field } from '../__fixtures__/RFCField'
+import { Field } from '../__fixtures__/ListField'
 
 test('render slots', () => {
   const instance = create(

@@ -1,41 +1,31 @@
 import * as React from 'react'
 
-export const createSlotsManager = <T extends Record<string, React.ElementType>>(
-  components: T,
-  onChange: (name: keyof T) => void
-) => {
-  type K = keyof T
-  const propsMap = new Map<K, object>()
-  return {
-    register(name: K, props: object) {
-      propsMap.set(name, props)
-    },
-    update(name: K, props: object) {
-      propsMap.set(name, props)
-      onChange(name)
-    },
-    unmount(name: K) {
-      propsMap.delete(name)
-      onChange(name)
-    },
-    getProps<P extends K>(name: P) {
-      return propsMap.get(name) as React.ComponentPropsWithRef<T[P]> | undefined
-    },
-    render<P extends K>(
-      name: P,
-      defaultProps?: Partial<React.ComponentPropsWithRef<T[P]>>,
-      finalProps?: React.ComponentPropsWithRef<T[P]>
-    ) {
-      const props = propsMap.get(name)
-      if (!props) return null
+type Slot = React.ElementType
 
-      return React.createElement(
-        components[name],
-        finalProps || (defaultProps ? { ...defaultProps, ...props } : props)
-      )
+export const createSlotsManager = (onChange: (slot: Slot) => void) => {
+  const elementMap = new Map<Slot, React.ReactElement>()
+  return {
+    register(slot: Slot, element: React.ReactElement) {
+      elementMap.set(slot, element)
     },
-    has(name: K) {
-      return propsMap.has(name)
+    update(slot: Slot, element: React.ReactElement) {
+      elementMap.set(slot, element)
+      onChange(slot)
+    },
+    unmount(slot: Slot) {
+      elementMap.delete(slot)
+      onChange(slot)
+    },
+    get<T extends Slot>(slot: T) {
+      return elementMap.get(slot) as
+        | React.ReactElement<React.ComponentProps<T>, T>
+        | undefined
+    },
+    getProps<T extends Slot>(slot: T) {
+      const element = elementMap.get(slot)
+      if (!element) return undefined
+      const { ref, props } = element as any
+      return (ref ? { ...props, ref } : props) as React.ComponentProps<T>
     },
   }
 }

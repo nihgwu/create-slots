@@ -7,7 +7,7 @@ import {
   getLastSlot,
   getSlots,
   getSlotProps,
-} from '../rfc'
+} from '../list'
 
 const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
   <span {...props} />

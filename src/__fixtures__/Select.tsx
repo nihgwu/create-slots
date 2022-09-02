@@ -1,39 +1,46 @@
 import * as React from 'react'
 
-import createSlots, { GetPropsArgs } from '../list'
+import { createHost, createSlot, isSlot, getSlotProps } from '../list'
 
 const Divider = (props: React.ComponentPropsWithoutRef<'hr'>) => (
   <hr {...props} />
 )
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Item: 'li',
-  Divider: Object.assign(Divider, { foo: 'Foo' }),
-})
+const SelectItem = createSlot('li')
+const SelectDivider = createSlot(Object.assign(Divider, { foo: 'Foo' }))
 
-const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
-  const Slots = useSlots()
-  type SlotItem = Extract<GetPropsArgs<typeof SlotComponents>, { name: 'Item' }>
-  const [selected, setSelected] = React.useState<SlotItem>()
-  const slotItems = Slots.renderItems((item) => {
-    if (item.name === 'Item') {
-      return {
-        ...item.props,
-        'data-index': item.index,
-        'aria-selected': item === selected,
-        onClick: () => {
-          setSelected(item)
-        },
-      }
-    }
-  })
+export const Select = (props: React.ComponentPropsWithoutRef<'ul'>) => {
+  const [selected, setSelected] = React.useState<string>()
+  const indexRef = React.useRef(0)
 
   return (
     <div>
-      <div>Selected: {selected?.props.value ?? ''}</div>
-      <ul {...props}>{slotItems}</ul>
+      <div>Selected: {selected ?? ''}</div>
+      {createHost(props.children, (slots) => {
+        indexRef.current = 0
+        return (
+          <ul {...props}>
+            {slots.map((slot) => {
+              if (isSlot(slot, SelectItem)) {
+                const slotProps = getSlotProps(slot)
+                return (
+                  <li
+                    {...slotProps}
+                    data-index={indexRef.current++}
+                    aria-selected={slotProps.value === selected}
+                    onClick={() => setSelected(slotProps.value as string)}
+                  />
+                )
+              }
+
+              return slot
+            })}
+          </ul>
+        )
+      })}
     </div>
   )
 }
 
-export const Select = Object.assign(createHost(SelectBase), SlotComponents)
+Select.Item = SelectItem
+Select.Divider = SelectDivider

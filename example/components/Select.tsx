@@ -1,43 +1,51 @@
-import React, { useState } from 'react'
-import createSlots from 'create-slots/list'
+import React, { useRef, useState } from 'react'
+import { createHost, createSlot, getSlotProps, isSlot } from 'create-slots/list'
 
 import { Item } from './Item'
 
-const { createHost, SlotComponents, useSlots } = createSlots({
-  Item,
-  Divider: 'hr',
-})
+const SelectItem = createSlot(Item)
+const SelectDivider = createSlot('hr')
 
-const SelectBase: React.FC<React.ComponentPropsWithoutRef<'ul'>> = (props) => {
+export const Select = (props: React.ComponentProps<'ul'>) => {
   const [selected, setSelected] = useState<React.ReactNode>(null)
-  const slotItems = useSlots().renderItems(
-    ({ name, props: itemProps, index }) => {
-      if (name === 'Item') {
-        return {
-          ...itemProps,
-          role: 'button',
-          tabIndex: 0,
-          'data-index': index,
-          'aria-selected': itemProps.children === selected,
-          onClick: () => {
-            setSelected(itemProps.value)
-          },
-          onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              setSelected(itemProps.value)
-            }
-          },
-        }
-      }
-    }
-  )
+  const indexRef = useRef(0)
 
   return (
     <div>
       <div>Selected: {selected}</div>
-      <ul {...props}>{slotItems}</ul>
+      {createHost(props.children, (slots) => {
+        indexRef.current = 0
+        return (
+          <ul {...props}>
+            {slots.map((slot) => {
+              if (isSlot(slot, SelectItem)) {
+                const itemProps = getSlotProps(slot)
+
+                return (
+                  <Item
+                    {...itemProps}
+                    role="button"
+                    tabIndex={0}
+                    data-index={indexRef.current++}
+                    aria-selected={itemProps.value === selected}
+                    onClick={() => setSelected(itemProps.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        setSelected(itemProps.value)
+                      }
+                    }}
+                  />
+                )
+              }
+
+              return slot
+            })}
+          </ul>
+        )
+      })}
     </div>
   )
 }
 
-export const Select = Object.assign(createHost(SelectBase), SlotComponents)
+Select.Item = SelectItem
+Select.Divider = SelectDivider
