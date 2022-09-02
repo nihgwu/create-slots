@@ -1,8 +1,13 @@
 import * as React from 'react'
 
-import { createSlotsContext, getComponentName, hoistStatics } from '../utils'
+import {
+  createSlotsContext,
+  getComponentName,
+  hoistStatics,
+  useIsomorphicEffect,
+} from '../utils'
 import { DevChildren } from '../DevChildren'
-import { ScanContext, ScanProvider } from '../ScanContext'
+import { ScanContext, ScanProvider } from './ScanContext'
 import { createSlotsManager } from './SlotsManager'
 import { SlotElement } from './utils'
 
@@ -73,7 +78,7 @@ export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
       React.useEffect(() => {
         Slots.has(key) && Slots.update(key, element)
       })
-      React.useEffect(() => {
+      useIsomorphicEffect(() => {
         Slots.clear()
         Scan.rescan()
         return () => Slots.unmount(key)
