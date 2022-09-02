@@ -1,5 +1,9 @@
 import * as React from 'react'
 
+export const useIsomorphicEffect =
+  // istanbul ignore next
+  typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect
+
 export const createSlotsContext = <T>(defaultValue: T) => {
   const context = React.createContext(defaultValue)
   context.displayName = 'SlotsContext'
