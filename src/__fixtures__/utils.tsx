@@ -22,3 +22,12 @@ export const create: typeof TestRenderer.create = (element) => {
 
 export const render = (element: React.ReactElement) =>
   RTL.render(element, { wrapper: React.StrictMode })
+
+export const setNodeEnv = (env: string) => {
+  const NODE_ENV = process.env.NODE_ENV
+  process.env.NODE_ENV = env
+
+  return () => {
+    process.env.NODE_ENV = NODE_ENV
+  }
+}

@@ -5,12 +5,12 @@
 import * as React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 
+import { setNodeEnv } from '../__fixtures__/utils'
 import { Field } from '../__fixtures__/Field'
 import { Select } from '../__fixtures__/Select'
 
 test('default SSR', () => {
-  const NODE_ENV = process.env.NODE_ENV
-  process.env.NODE_ENV = 'production'
+  const restoreNodeEnv = setNodeEnv('production')
 
   const markup = renderToStaticMarkup(
     <Field>
@@ -45,12 +45,11 @@ test('default SSR', () => {
 
   expect(markup1).toEqual(markup)
 
-  process.env.NODE_ENV = NODE_ENV
+  restoreNodeEnv()
 })
 
 test('list SSR', () => {
-  const NODE_ENV = process.env.NODE_ENV
-  process.env.NODE_ENV = 'production'
+  const restoreNodeEnv = setNodeEnv('production')
 
   const markup = renderToStaticMarkup(
     <Select>
@@ -63,7 +62,7 @@ test('list SSR', () => {
     `"<div><div>Selected: </div><ul><li value=\\"foo\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
   )
 
-  process.env.NODE_ENV = NODE_ENV
+  restoreNodeEnv()
 })
 
 test('default SSR - development', () => {

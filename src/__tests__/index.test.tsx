@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { create, render } from '../__fixtures__/utils'
+import { create, render, setNodeEnv } from '../__fixtures__/utils'
 import { Field } from '../__fixtures__/Field'
 
 test('render slots', () => {
@@ -234,8 +234,7 @@ test('dev warning', () => {
     'Unwrapped children found in "HostSlots", either wrap them in slots or remove'
   )
 
-  const NODE_ENV = process.env.NODE_ENV
-  process.env.NODE_ENV = 'production'
+  const restoreNodeEnv = setNodeEnv('production')
 
   render(
     <Field>
@@ -245,7 +244,7 @@ test('dev warning', () => {
   )
   expect(warn).toHaveBeenCalledTimes(1)
 
-  process.env.NODE_ENV = NODE_ENV
+  restoreNodeEnv()
 })
 
 test('without host', () => {
