@@ -10,6 +10,8 @@ Bring [Slots](https://github.com/reactjs/rfcs/pull/223) to React, with SSR suppo
 💪 Best TypeScript support  
 🪶 Lightweight (< 700B)
 
+Checkout the [slides](./assets//React%20Slots-Neo%20Nie.key) for the background story
+
 ## Usage
 
 ### Simple version (only one slot is used per slot type)
