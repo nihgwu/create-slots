@@ -3,6 +3,7 @@ import { screen, fireEvent } from '@testing-library/react'
 
 import { create, render, setNodeEnv } from '../__fixtures__/utils'
 import { Select } from '../__fixtures__/Select'
+import { RefProvider, RefConsumer } from '../__fixtures__/Ref'
 
 test('render slots', () => {
   const instance = create(
@@ -13,31 +14,31 @@ test('render slots', () => {
     </Select>
   )
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Selected: 
-  </div>
-  <ul>
-    <li
-      aria-selected={false}
-      data-index={0}
-      onClick={[Function]}
-      value="foo"
-    >
-      Foo
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={1}
-      onClick={[Function]}
-      value="bar"
-    >
-      Bar
-    </li>
-  </ul>
-</div>
-`)
+    <div>
+      <div>
+        Selected: 
+      </div>
+      <ul>
+        <li
+          aria-selected={false}
+          data-index={0}
+          onClick={[Function]}
+          value="foo"
+        >
+          Foo
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={1}
+          onClick={[Function]}
+          value="bar"
+        >
+          Bar
+        </li>
+      </ul>
+    </div>
+  `)
 
   // insert item
   instance.update(
@@ -50,40 +51,40 @@ test('render slots', () => {
     </Select>
   )
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Selected: 
-  </div>
-  <ul>
-    <li
-      aria-selected={false}
-      data-index={0}
-      onClick={[Function]}
-      value="foo"
-    >
-      Foo
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={1}
-      onClick={[Function]}
-      value="baz"
-    >
-      Baz
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={2}
-      onClick={[Function]}
-      value="bar"
-    >
-      Bar
-    </li>
-  </ul>
-</div>
-`)
+    <div>
+      <div>
+        Selected: 
+      </div>
+      <ul>
+        <li
+          aria-selected={false}
+          data-index={0}
+          onClick={[Function]}
+          value="foo"
+        >
+          Foo
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={1}
+          onClick={[Function]}
+          value="baz"
+        >
+          Baz
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={2}
+          onClick={[Function]}
+          value="bar"
+        >
+          Bar
+        </li>
+      </ul>
+    </div>
+  `)
 
   // remove item
   instance.update(
@@ -94,31 +95,31 @@ test('render slots', () => {
     </Select>
   )
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Selected: 
-  </div>
-  <ul>
-    <li
-      aria-selected={false}
-      data-index={0}
-      onClick={[Function]}
-      value="foo"
-    >
-      Foo
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={1}
-      onClick={[Function]}
-      value="bar"
-    >
-      Bar
-    </li>
-  </ul>
-</div>
-`)
+    <div>
+      <div>
+        Selected: 
+      </div>
+      <ul>
+        <li
+          aria-selected={false}
+          data-index={0}
+          onClick={[Function]}
+          value="foo"
+        >
+          Foo
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={1}
+          onClick={[Function]}
+          value="bar"
+        >
+          Bar
+        </li>
+      </ul>
+    </div>
+  `)
 
   // update item
   instance.update(
@@ -129,31 +130,31 @@ test('render slots', () => {
     </Select>
   )
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Selected: 
-  </div>
-  <ul>
-    <li
-      aria-selected={false}
-      data-index={0}
-      onClick={[Function]}
-      value="foo"
-    >
-      FooFoo
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={1}
-      onClick={[Function]}
-      value="bar"
-    >
-      Bar
-    </li>
-  </ul>
-</div>
-`)
+    <div>
+      <div>
+        Selected: 
+      </div>
+      <ul>
+        <li
+          aria-selected={false}
+          data-index={0}
+          onClick={[Function]}
+          value="foo"
+        >
+          FooFoo
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={1}
+          onClick={[Function]}
+          value="bar"
+        >
+          Bar
+        </li>
+      </ul>
+    </div>
+  `)
 
   // nested slots
   instance.update(
@@ -171,54 +172,54 @@ test('render slots', () => {
   )
 
   expect(instance).toMatchInlineSnapshot(`
-<div>
-  <div>
-    Selected: 
-  </div>
-  <ul>
-    <li
-      aria-selected={false}
-      data-index={0}
-      onClick={[Function]}
-      value="foo"
-    >
+    <div>
       <div>
-        <div>
-          Selected: 
-        </div>
-        <ul>
-          <li
-            aria-selected={false}
-            data-index={0}
-            onClick={[Function]}
-            value="foo"
-          >
-            FooFoo
-          </li>
-          <hr />
-          <li
-            aria-selected={false}
-            data-index={1}
-            onClick={[Function]}
-            value="bar"
-          >
-            Bar
-          </li>
-        </ul>
+        Selected: 
       </div>
-    </li>
-    <hr />
-    <li
-      aria-selected={false}
-      data-index={1}
-      onClick={[Function]}
-      value="bar"
-    >
-      Bar
-    </li>
-  </ul>
-</div>
-`)
+      <ul>
+        <li
+          aria-selected={false}
+          data-index={0}
+          onClick={[Function]}
+          value="foo"
+        >
+          <div>
+            <div>
+              Selected: 
+            </div>
+            <ul>
+              <li
+                aria-selected={false}
+                data-index={0}
+                onClick={[Function]}
+                value="foo"
+              >
+                FooFoo
+              </li>
+              <hr />
+              <li
+                aria-selected={false}
+                data-index={1}
+                onClick={[Function]}
+                value="bar"
+              >
+                Bar
+              </li>
+            </ul>
+          </div>
+        </li>
+        <hr />
+        <li
+          aria-selected={false}
+          data-index={1}
+          onClick={[Function]}
+          value="bar"
+        >
+          Bar
+        </li>
+      </ul>
+    </div>
+  `)
 })
 
 test('static hoisting', () => {
@@ -238,14 +239,14 @@ test('ref', () => {
   )
 
   expect(ref.current).toMatchInlineSnapshot(`
-<li
-  aria-selected="false"
-  data-index="0"
-  value="foo"
->
-  Foo
-</li>
-`)
+    <li
+      aria-selected="false"
+      data-index="0"
+      value="foo"
+    >
+      Foo
+    </li>
+  `)
 })
 
 test('interaction', () => {
@@ -288,4 +289,24 @@ test('dev warning', () => {
   expect(warn).toHaveBeenCalledTimes(1)
 
   restoreNodeEnv()
+})
+
+test('attaching ref', () => {
+  const callback = jest.fn()
+  render(
+    <Select>
+      <RefProvider<HTMLLIElement>>
+        {(ref) => (
+          <>
+            <Select.Item ref={ref} value="foo">
+              Foo
+            </Select.Item>
+            <RefConsumer targetRef={ref}>{callback}</RefConsumer>
+          </>
+        )}
+      </RefProvider>
+    </Select>
+  )
+
+  expect(callback).toHaveBeenLastCalledWith(expect.any(HTMLLIElement))
 })
