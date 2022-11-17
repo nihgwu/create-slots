@@ -23,6 +23,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={0}
           onClick={[Function]}
+          role="option"
           value="foo"
         >
           Foo
@@ -32,6 +33,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={1}
           onClick={[Function]}
+          role="option"
           value="bar"
         >
           Bar
@@ -60,6 +62,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={0}
           onClick={[Function]}
+          role="option"
           value="foo"
         >
           Foo
@@ -69,6 +72,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={1}
           onClick={[Function]}
+          role="option"
           value="baz"
         >
           Baz
@@ -78,6 +82,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={2}
           onClick={[Function]}
+          role="option"
           value="bar"
         >
           Bar
@@ -104,6 +109,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={0}
           onClick={[Function]}
+          role="option"
           value="foo"
         >
           Foo
@@ -113,6 +119,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={1}
           onClick={[Function]}
+          role="option"
           value="bar"
         >
           Bar
@@ -139,6 +146,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={0}
           onClick={[Function]}
+          role="option"
           value="foo"
         >
           FooFoo
@@ -148,6 +156,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={1}
           onClick={[Function]}
+          role="option"
           value="bar"
         >
           Bar
@@ -181,6 +190,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={0}
           onClick={[Function]}
+          role="option"
           value="foo"
         >
           <div>
@@ -192,6 +202,7 @@ test('render slots', () => {
                 aria-selected={false}
                 data-index={0}
                 onClick={[Function]}
+                role="option"
                 value="foo"
               >
                 FooFoo
@@ -201,6 +212,7 @@ test('render slots', () => {
                 aria-selected={false}
                 data-index={1}
                 onClick={[Function]}
+                role="option"
                 value="bar"
               >
                 Bar
@@ -213,6 +225,7 @@ test('render slots', () => {
           aria-selected={false}
           data-index={1}
           onClick={[Function]}
+          role="option"
           value="bar"
         >
           Bar
@@ -242,6 +255,7 @@ test('ref', () => {
     <li
       aria-selected="false"
       data-index="0"
+      role="option"
       value="foo"
     >
       Foo
@@ -258,10 +272,10 @@ test('interaction', () => {
     </Select>
   )
 
-  fireEvent.click(screen.getAllByRole('listitem')[0])
+  fireEvent.click(screen.getAllByRole('option')[0])
   expect(screen.getByText('Selected: foo')).not.toBeNull()
 
-  fireEvent.click(screen.getAllByRole('listitem')[1])
+  fireEvent.click(screen.getAllByRole('option')[1])
   expect(screen.getByText('Selected: bar')).not.toBeNull()
 })
 

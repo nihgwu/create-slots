@@ -89,6 +89,7 @@ export const Select = (props: SelectProps) => {
                 return (
                   <li
                     {...slotProps}
+                    role="option"
                     data-index={indexRef.current++}
                     aria-selected={slotProps.value === selected}
                     onClick={() => setSelected(slotProps.value as string)}

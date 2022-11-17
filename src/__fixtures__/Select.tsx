@@ -26,6 +26,7 @@ export const Select = (props: React.ComponentPropsWithoutRef<'ul'>) => {
                 return (
                   <li
                     {...slotProps}
+                    role="option"
                     data-index={indexRef.current++}
                     aria-selected={slotProps.value === selected}
                     onClick={() => setSelected(slotProps.value as string)}
