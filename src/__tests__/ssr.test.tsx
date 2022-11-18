@@ -59,7 +59,7 @@ test('list SSR', () => {
     </Select>
   )
   expect(markup).toMatchInlineSnapshot(
-    `"<div><div>Selected: </div><ul><li value=\\"foo\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
+    `"<div><div>Selected: </div><ul><li value=\\"foo\\" role=\\"option\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" role=\\"option\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
   )
 
   restoreNodeEnv()
@@ -93,6 +93,6 @@ test('list SSR - development', () => {
     </Select>
   )
   expect(markup).toMatchInlineSnapshot(
-    `"<div><div>Selected: </div><slots-wrapper></slots-wrapper><ul><li value=\\"foo\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
+    `"<div><div>Selected: </div><slots-wrapper></slots-wrapper><ul><li value=\\"foo\\" role=\\"option\\" data-index=\\"0\\" aria-selected=\\"false\\">Foo</li><hr/><li value=\\"bar\\" role=\\"option\\" data-index=\\"1\\" aria-selected=\\"false\\">Bar</li></ul></div>"`
   )
 })

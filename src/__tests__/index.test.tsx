@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { create, render, setNodeEnv } from '../__fixtures__/utils'
 import { Field } from '../__fixtures__/Field'
+import { RefProvider, RefConsumer } from '../__fixtures__/Ref'
 
 test('render slots', () => {
   const instance = create(
@@ -259,4 +260,22 @@ test('without host', () => {
       Description
     </span>
   `)
+})
+
+test('attaching ref', () => {
+  const callback = jest.fn()
+  render(
+    <Field>
+      <RefProvider<HTMLLabelElement>>
+        {(ref) => (
+          <>
+            <Field.Label ref={ref}>Label</Field.Label>
+            <RefConsumer targetRef={ref}>{callback}</RefConsumer>
+          </>
+        )}
+      </RefProvider>
+    </Field>
+  )
+
+  expect(callback).toHaveBeenLastCalledWith(expect.any(HTMLLabelElement))
 })

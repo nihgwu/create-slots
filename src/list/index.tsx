@@ -49,7 +49,9 @@ export const HostSlots = ({
           {process.env.NODE_ENV === 'production' ? (
             children
           ) : (
-            <DevChildren name="HostSlots">{children}</DevChildren>
+            <DevChildren name="HostSlots" forceUpdate={forceUpdate}>
+              {children}
+            </DevChildren>
           )}
         </ScanProvider>
       </SlotsContext.Provider>
