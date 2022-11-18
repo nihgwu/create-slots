@@ -16,9 +16,11 @@ const Template = ({ children }: { children: () => ReturnType<Callback> }) => {
 export const HostSlots = ({
   children,
   callback,
+  name = 'HostSlots',
 }: {
   children: React.ReactNode
   callback: Callback
+  name?: string
 }) => {
   const forceUpdate = React.useReducer(() => [], [])[1]
   const Slots = React.useMemo(
@@ -32,7 +34,7 @@ export const HostSlots = ({
         {process.env.NODE_ENV === 'production' ? (
           children
         ) : (
-          <DevChildren name="HostSlots" forceUpdate={forceUpdate}>
+          <DevChildren name={name} forceUpdate={forceUpdate}>
             {children}
           </DevChildren>
         )}
@@ -42,8 +44,12 @@ export const HostSlots = ({
   )
 }
 
-export const createHost = (children: React.ReactNode, callback: Callback) => {
-  return <HostSlots children={children} callback={callback} />
+export const createHost = (
+  children: React.ReactNode,
+  callback: Callback,
+  name?: string
+) => {
+  return <HostSlots children={children} callback={callback} name={name} />
 }
 
 export const createSlot = <T extends React.ElementType>(Fallback?: T) => {
