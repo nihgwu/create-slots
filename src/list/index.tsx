@@ -14,7 +14,7 @@ import { SlotElement } from './utils'
 export * from './utils'
 
 type Slots = ReturnType<typeof createSlotsManager>
-type Callback = (slots: SlotElement[]) => JSX.Element | null
+type Callback = (slots: SlotElement[]) => React.ReactElement | null
 
 const SlotsContext = createSlotsContext<Slots | undefined>(undefined)
 

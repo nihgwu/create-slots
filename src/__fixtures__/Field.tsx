@@ -3,12 +3,8 @@ import * as React from 'react'
 import { createHost, createSlot } from '../'
 
 const Description = (props: React.ComponentPropsWithoutRef<'span'>) => (
-  <span {...props} />
+  <span data-testid="description" {...props} />
 )
-
-Description.defaultProps = {
-  'data-testid': 'description',
-}
 
 const FieldLabel = createSlot<'label'>()
 const FieldInput = createSlot('input')

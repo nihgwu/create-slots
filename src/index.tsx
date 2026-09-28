@@ -5,7 +5,7 @@ import { DevChildren } from './DevChildren'
 import { createSlotsManager } from './SlotsManager'
 
 type Slots = ReturnType<typeof createSlotsManager>
-type Callback = (Slots: Slots) => JSX.Element | null
+type Callback = (Slots: Slots) => React.ReactElement | null
 
 const SlotsContext = createSlotsContext<Slots | undefined>(undefined)
 
